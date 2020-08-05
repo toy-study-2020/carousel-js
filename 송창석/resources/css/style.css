@@ -1,0 +1,21 @@
+/* 공통 */
+.hide{font-size:0;position:absolute;left:-9999px;clip:rect(0,0,0,0);}
+.img{display:block}
+.img img{width:100%;max-width:100%;vertical-align:top}
+#wrap,
+#ct{overflow:hidden;width:100%;text-align:center}
+
+/* content */
+
+/* carousel */
+.container{overflow:hidden;display:inline-block;width:100%;position:relative;margin: 0 auto}
+.wrapper{transition:all 0.5s ease}
+.wrapper:after{content:'';display:block;clear:both}
+.arrow{width:40px;height:40px;position:absolute;top:50%;margin-top:-20px;border-radius:50%;background-color:rgba(0,0,0,0.5);z-index:2;cursor:pointer}
+.arrow:hover{background-color:rgba(0,0,0,0.8)}
+.arrow:after{content:'';display:block;width:10px;height:10px;margin:0 auto;border-right:2px solid #fff;border-bottom:2px solid #fff}
+.arrow.prev{left:0}
+.arrow.next{right:0}
+.arrow.prev:after{transform:rotate(-225deg);}
+.arrow.next:after{transform:rotate(-45deg);}
+.item{float:left;height:100%}
