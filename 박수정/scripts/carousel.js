@@ -111,18 +111,10 @@ class slider {
     }
     coordinateShift(time) {
         this.allItems = document.querySelectorAll(this.ITEM);
-
         this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
-
-        // for (let i = 0; i < this.allItems.length; i++) {
-        //     this.allItems[i].classList.remove('active');
-        // }
-        // this.allItems[this.activeIdx].classList.add('active');
     }
     animate(cb) {
-        if (this.fired) {
-            return;
-        }
+        if (this.fired) return;
 
         this.$wrapper.classList.remove(this.controlTransitionClass);
         cb();
