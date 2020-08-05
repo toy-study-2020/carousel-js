@@ -95,16 +95,14 @@ class slider {
         };
 
         prevBtn.addEventListener('click', () => {
+            console.log(this.fired)
             if (this.fired) {
                 return;
             }
 
             _this.$wrapper.classList.remove(this.controlTransitionClass);
-
-            if (this.activeIdx) {
-                this.activeIdx -= 1;
-                this.move();
-            }
+            this.activeIdx -= 1;
+            this.move();
         });
 
         nextBtn.addEventListener('click', () => {
@@ -113,11 +111,8 @@ class slider {
             }
 
             _this.$wrapper.classList.remove(this.controlTransitionClass);
-
-            if (this.activeIdx < this.realItems.length) {
-                this.activeIdx += 1;
-                this.move();
-            } 
+            this.activeIdx += 1;
+            this.move();
         });
     }
     navigationInit() {
@@ -129,10 +124,10 @@ class slider {
 
         this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
 
-        for (let i = 0; i < this.allItems.length; i++) {
-            this.allItems[i].classList.remove('active');
-        }
-        this.allItems[this.activeIdx].classList.add('active');
+        // for (let i = 0; i < this.allItems.length; i++) {
+        //     this.allItems[i].classList.remove('active');
+        // }
+        // this.allItems[this.activeIdx].classList.add('active');
     }
     init() {
         this.setInitHTML();
