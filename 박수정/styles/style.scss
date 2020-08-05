@@ -1,0 +1,9 @@
+@charset "utf-8";
+
+.slider {
+    &__container {
+        margin: 0 auto;
+        overflow: hidden;
+        outline: 1px dashed red;
+    }
+}
