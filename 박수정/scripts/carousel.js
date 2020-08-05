@@ -1,14 +1,16 @@
 class slider {
     constructor(selector, option) {
         this.selector = document.querySelector(selector);
-
-        if (option) {
-
-        }
-
         this.CONTAINERNAME = 'slider__container';
         this.WRAPPERRNAME = 'slider__wrapper';
         this.ITEM = '.slider__item';
+        this.navigation = false;
+
+        if (option) {
+            this.navigation = option.navigation
+        }
+
+
     }
     makeHTML() {
         const wrapper = document.createElement('div');
