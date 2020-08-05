@@ -25,7 +25,6 @@ class slider {
     }
     setWidth() {
         const items = document.querySelectorAll(this.ITEM);
-        const container = document.querySelector(`.${this.CONTAINERNAME}`);
 
         let getWidth = items[0].offsetWidth;
 
@@ -43,10 +42,15 @@ class slider {
             items[i].style.width = `${getWidth}px`;
         }
 
-        container.style.width = `${getWidth}px`;
+        this.selector.style.width = `${getWidth}px`;
+    }
+    setNavigation() {
+
     }
     init() {
         this.makeHTML();
         this.setWidth();
+
+        if (this.navigation) this.setNavigation();
     }
 }
