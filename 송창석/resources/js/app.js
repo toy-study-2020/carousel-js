@@ -1,51 +1,88 @@
 // carousel
-const carousel = (obj) => {
-    const container = document.querySelector(obj.selector);
-    const wraper = container.children[0];
+// clone item을 만드는 것과 그에 따른 index 값 변화를 파악하는 것이 요점일듯!
+
+const carousel = (options) => {
+    const container = document.querySelector(options.selector);
+    const wrapper = container.children[0];
     const item = container.querySelectorAll('.item');
+    const itemLength = item.length;
     const arrow = container.querySelectorAll('.arrow');
+    const initialindex = options.initialindex;
+    const space = options.space;
+    const speed = options.speed;
+
+    // 처음, 끝 item 복제
+    let firstChild = wrapper.firstElementChild;
+    let lastChild = wrapper.lastElementChild;
+    let clonedFirst = firstChild.cloneNode(true);
+    let clonedLast = lastChild.cloneNode(true);
+    wrapper.appendChild(clonedFirst);
+    wrapper.insertBefore(clonedLast, wrapper.firstElementChild);
     
-    const ele = {
-        container: container,
-        wrapper: wraper,
-        item: item,
-        arrow: arrow,
-    }
-    const idx = {
-        start: obj.initialindex < ele.item.length ? obj.initialindex : false,
-        now: obj.initialindex < ele.item.length ? obj.initialindex : false,
-        end: ele.item.length - 1,
-    }
-    const size = itemSize(ele.item, obj.margin);
-    setDefaultSize(ele, idx, size);
+    // current index, slide setting
+    let currentIdx = initialindex;
+    let currentSlide = item[currentIdx];
+    currentSlide.classList.add('carousel-active');
+
+    // item size 계산
+    const calcsize = itemSize(item, space);
+    const moveSize = calcsize.width + calcsize.space;
+    setDefaultSize(container, wrapper, item, initialindex, calcsize);
     
-    // 방향 결정
+    // arrow 방향 결정
     const clickArrow = (e) => {
         const target = e.target;
         const direction = target.classList.contains('next');
         
-        if(direction) moveRight(ele, idx, size);
-        else moveLeft(ele, idx, size);
+        if(direction) moveNext();
+        else movePrev();
     }
     for(let i = 0; i < arrow.length; i++) {
         arrow[i].addEventListener('click', clickArrow);
     }
 
     // next, 오른쪽으로
-    const moveRight = (ele, idx, size) => {
-        // console.log('right', ele, idx, size);
-        idx.now = idx.now >= idx.end ? 0 : idx.now + 1;
-        moveWrapper(ele, idx, size);
+    const moveNext = () => {
+        console.log('next', currentIdx);
+        if(currentIdx <= itemLength - 1) {
+            wrapper.style.transition = `${speed}ms`;
+            wrapper.style.transform = `translate3d(-${moveSize * (currentIdx + 2)}px, 0px, 0px)`;
+        }
+        if(currentIdx === itemLength - 1) {
+            setTimeout(() => {
+                wrapper.style.transition = `0ms`;
+                wrapper.style.transform = `translate3d(-${moveSize}px, 0px, 0px)`;
+            }, speed);
+            currentIdx = -1;
+        }
+        
+        currentSlide.classList.remove('carousel-active');
+        currentSlide = item[++currentIdx];
+        currentSlide.classList.add('carousel-active');
     }
 
     // prev, 왼쪽으로
-    const moveLeft = (ele, idx, size) => {
-        idx.now = idx.now <= 0 ? idx.end : idx.now - 1;
-        moveWrapper(ele, idx, size);
+    const movePrev = () => {
+        console.log('prev', currentIdx);
+        if(currentIdx >= 0) {
+            wrapper.style.transition = `${speed}ms`;
+            wrapper.style.transform = `translate3d(-${moveSize * currentIdx}px, 0px, 0px)`;
+        }
+        if(currentIdx === 0) {
+            setTimeout(() => {
+                wrapper.style.transition = `0ms`;
+                wrapper.style.transform = `translate3d(-${moveSize * itemLength}px, 0px, 0px)`;
+            }, speed);
+            currentIdx = itemLength;
+        }
+        
+        currentSlide.classList.remove('carousel-active');
+        currentSlide = item[--currentIdx];
+        currentSlide.classList.add('carousel-active');
     }
 }
 
-const itemSize = (item, margin) => {
+const itemSize = (item, space) => {
     const width = () => {
         let size = 0;
         item.forEach(element => {
@@ -61,47 +98,36 @@ const itemSize = (item, margin) => {
         return size;
     }
     const sizeObject = {
-        margin: margin,
+        space: space,
         width: width(),
         height: height()
     }
     return sizeObject;
 }
 
-const setDefaultSize = (ele, idx, size) => {
+const setDefaultSize = (container, wrapper, item, initIdx, size) => {
     // item
-    setItem(ele, idx, size);
+    item.forEach(element => {
+        element.style.margin = `0 ${size.space}px`;
+    });
     // wrapper
-    setWrapper(ele, idx, size);
+    const wrapWidth = (size.width + size.space) * item.length * 2;
+    const transWidth = (size.width + size.space) * (initIdx + 1) * -1;
+    wrapper.style.width =  `${wrapWidth}px`;
+    wrapper.style.transform = `translate3d(${transWidth}px, 0px, 0px)`;
+    
     // cotainer
-    setContainer(ele, idx, size);
+    container.style.width = `${size.width + size.space}px`;
+    container.style.height = `${size.height}px`;
 }
 
-// item
-const setItem = (ele, idx, size) => {
-    ele.item[idx.start].classList.add('now');
-    ele.item.forEach(element => {
-        element.style.marginRight = size.margin + 'px';
+
+
+window.onload = () => {
+    const slide = carousel({
+        selector: '#carousel',
+        speed: 500,
+        space: 0,
+        initialindex: 0,
     });
 }
-// wrapper
-const setWrapper = (ele, idx, size) => {
-    ele.wrapper.style.width = (size.width + size.margin) * ele.item.length + 'px';
-    moveWrapper(ele, idx, size);
-}
-const moveWrapper = (ele, idx, size) => {
-    ele.wrapper.style.marginLeft = ((size.width + size.margin) * idx.now) * -1 + 'px';
-}
-// container
-const setContainer = (ele, idx, size) => {
-    ele.container.style.width = size.width + size.margin + 'px';
-}
-
-
-
-
-const slide = carousel({
-    selector: '#carousel',
-    margin: 0,
-    initialindex: 0,
-});
