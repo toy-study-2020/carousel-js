@@ -5,10 +5,16 @@ class slider {
         this.WRAPPERRNAME = 'slider__wrapper';
         this.ITEM = '.slider__item';
         this.NAVIGATIONNAME = 'slider__navigation';
+        this.prevBtn = '.slider__navigation--prev';
+        this.nextBtn = '.slider__navigation--next';
+        this.activeIdx = 0;
         this.navigation = false;
+        this.$wrapper = null;
+        this.containerWidth = null;
+        this.items = null;
 
         if (option) {
-            this.navigation = option.navigation
+            this.navigation = option.navigation;
         }
     }
     makeHTML() {
@@ -21,27 +27,28 @@ class slider {
 
         wrapper.innerHTML = slideItemHTML;
         wrapper.className = this.WRAPPERRNAME;
+        this.$wrapper = document.querySelector(`.${this.WRAPPERRNAME}`);
     }
     setWidth() {
-        const items = document.querySelectorAll(this.ITEM);
-
-        let getWidth = items[0].offsetWidth;
+        this.items = document.querySelectorAll(this.ITEM);
+        let getWidth = this.items[0].offsetWidth;
 
         const assignGetWidth = function (idx) {
-            getWidth = items[idx].offsetWidth;
+            getWidth = this.items[idx].offsetWidth;
         };
 
-        for (let i = 0; i < items.length; i++) {
-            if (getWidth < items[i].offsetWidth) {
+        for (let i = 0; i < this.items.length; i++) {
+            if (getWidth < this.items[i].offsetWidth) {
                 assignGetWidth(i);
             }
         }
 
-        for (let i = 0; i < items.length; i++) {
-            items[i].style.width = `${getWidth}px`;
+        for (let i = 0; i < this.items.length; i++) {
+            this.items[i].style.width = `${getWidth}px`;
         }
 
         this.selector.style.width = `${getWidth}px`;
+        this.containerWidth = getWidth;
     }
     setNavigationHTML() {
         const navigation = document.createElement('div');
@@ -51,10 +58,43 @@ class slider {
         this.selector.appendChild(navigation);
         this.selector.appendChild = '<div></div>';
     }
+    setNavigationAct() {
+        const prevBtn = document.querySelector(this.prevBtn);
+        const nextBtn = document.querySelector(this.nextBtn);
+        let _this = this;
+
+        prevBtn.addEventListener('click', event => {
+            if (this.activeIdx) {
+                this.activeIdx -= 1;
+            } else {
+                this.activeIdx = this.items.length - 1;
+            }
+
+            this.move();
+        });
+
+        nextBtn.addEventListener('click', event => {
+            if (this.activeIdx < this.items.length - 1) {
+                this.activeIdx += 1;
+            } else {
+                this.activeIdx = 0;
+            }
+
+            this.move();
+        });
+    }
+    navigationInit() {
+        this.setNavigationHTML();
+        this.setNavigationAct();
+    }
+    move() {
+        console.log(this.activeIdx)
+        this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
+    }
     init() {
         this.makeHTML();
         this.setWidth();
 
-        if (this.navigation) this.setNavigationHTML();
+        if (this.navigation) this.navigationInit();
     }
 }
