@@ -70,7 +70,6 @@ class slider {
     setNavigationAct() {
         const prevBtn = document.querySelector(this.prevBtn);
         const nextBtn = document.querySelector(this.nextBtn);
-        let _this = this;
 
         this.$wrapper.addEventListener('transitionstart', () => {
             this.fired = true;
@@ -95,24 +94,15 @@ class slider {
         };
 
         prevBtn.addEventListener('click', () => {
-            console.log(this.fired)
-            if (this.fired) {
-                return;
-            }
-
-            _this.$wrapper.classList.remove(this.controlTransitionClass);
-            this.activeIdx -= 1;
-            this.coordinateShift();
+            this.animate(() => {
+                this.activeIdx -= 1;
+            })
         });
 
         nextBtn.addEventListener('click', () => {
-            if(this.fired) {
-                return;
-            }
-
-            _this.$wrapper.classList.remove(this.controlTransitionClass);
-            this.activeIdx += 1;
-            this.coordinateShift();
+            this.animate(() => {
+                this.activeIdx += 1;
+            })
         });
     }
     navigationInit() {
@@ -128,6 +118,15 @@ class slider {
         //     this.allItems[i].classList.remove('active');
         // }
         // this.allItems[this.activeIdx].classList.add('active');
+    }
+    animate(cb) {
+        if (this.fired) {
+            return;
+        }
+
+        this.$wrapper.classList.remove(this.controlTransitionClass);
+        cb();
+        this.coordinateShift();
     }
     init() {
         this.setInitHTML();
