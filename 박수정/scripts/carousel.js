@@ -81,14 +81,14 @@ class slider {
 
             if (this.activeIdx === this.realItems.length) {
                 this.activeIdx = 0;
-                this.move();
+                this.coordinateShift();
                 this.$wrapper.classList.add(this.controlTransitionClass);
                 return;
             }
 
             if (!this.activeIdx) {
                 this.activeIdx = this.realItems.length;
-                this.move();
+                this.coordinateShift();
                 this.$wrapper.classList.add(this.controlTransitionClass);
                 return;
             }
@@ -102,7 +102,7 @@ class slider {
 
             _this.$wrapper.classList.remove(this.controlTransitionClass);
             this.activeIdx -= 1;
-            this.move();
+            this.coordinateShift();
         });
 
         nextBtn.addEventListener('click', () => {
@@ -112,14 +112,14 @@ class slider {
 
             _this.$wrapper.classList.remove(this.controlTransitionClass);
             this.activeIdx += 1;
-            this.move();
+            this.coordinateShift();
         });
     }
     navigationInit() {
         this.setNavigationHTML();
         this.setNavigationAct();
     }
-    move(time) {
+    coordinateShift(time) {
         this.allItems = document.querySelectorAll(this.ITEM);
 
         this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
@@ -133,7 +133,7 @@ class slider {
         this.setInitHTML();
         this.setWidth();
         this.makeCloneHTML();
-        this.move();
+        this.coordinateShift();
         this.$wrapper.classList.add(this.controlTransitionClass);
 
         if (this.navigation) this.navigationInit();
