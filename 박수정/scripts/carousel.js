@@ -4,13 +4,12 @@ class slider {
         this.CONTAINERNAME = 'slider__container';
         this.WRAPPERRNAME = 'slider__wrapper';
         this.ITEM = '.slider__item';
+        this.NAVIGATIONNAME = 'slider__navigation';
         this.navigation = false;
 
         if (option) {
             this.navigation = option.navigation
         }
-
-
     }
     makeHTML() {
         const wrapper = document.createElement('div');
@@ -44,13 +43,18 @@ class slider {
 
         this.selector.style.width = `${getWidth}px`;
     }
-    setNavigation() {
+    setNavigationHTML() {
+        const navigation = document.createElement('div');
+        navigation.className = this.NAVIGATIONNAME;
+        navigation.innerHTML = '<button type="button" class="slider__navigation--prev">이전</button><button type=""button" class="slider__navigation--next">다음</button>';
 
+        this.selector.appendChild(navigation);
+        this.selector.appendChild = '<div></div>';
     }
     init() {
         this.makeHTML();
         this.setWidth();
 
-        if (this.navigation) this.setNavigation();
+        if (this.navigation) this.setNavigationHTML();
     }
 }
