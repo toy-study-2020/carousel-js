@@ -59,6 +59,16 @@ class slider {
         this.$wrapper.appendChild(firstItem)
         this.$wrapper.prepend(lastItem)
     }
+    coordinateShift() {
+        this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
+    }
+    animate(cb) {
+        if (this.fired) return;
+
+        this.$wrapper.classList.remove(this.CONTROLTRANSITIONCLASS);
+        cb();
+        this.coordinateShift();
+    }
     setNavigationHTML() {
         const navigation = document.createElement('div');
         navigation.className = this.NAVIGATIONNAME;
@@ -108,16 +118,6 @@ class slider {
     navigationInit() {
         this.setNavigationHTML();
         this.setNavigationAct();
-    }
-    coordinateShift() {
-        this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
-    }
-    animate(cb) {
-        if (this.fired) return;
-
-        this.$wrapper.classList.remove(this.CONTROLTRANSITIONCLASS);
-        cb();
-        this.coordinateShift();
     }
     init() {
         this.setInitHTML();
