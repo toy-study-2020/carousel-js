@@ -1,0 +1,27 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+body * {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.carousel {
+    display: flex;
+    width: 100%;
+}
+
+.carouselWrapper {
+    width: 600px;
+    margin: 200px auto 0;
+}
+
+.carousel > li {
+    display: flex;
+    padding: 100px 0;
+    border: 1px solid #000;
+    box-sizing: border-box;
+}
