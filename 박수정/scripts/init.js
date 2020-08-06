@@ -1,6 +1,6 @@
 window.onload = function () {
     const option = {
-        navigation: true
+        navigation: true,
         pagination: true,
         autoPlay: true
     }

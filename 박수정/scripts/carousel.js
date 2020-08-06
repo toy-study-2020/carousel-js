@@ -7,7 +7,8 @@ class slider {
         this.NAVIGATIONNAME = 'slider__navigation';
         this.PREVBTN = '.slider__navigation__btn--prev';
         this.NEXTBTN = '.slider__navigation__btn--next';
-        this.CONTROLTRANSITIONCLASS = 'transition--false'
+        this.CONTROLTRANSITIONCLASS = 'transition--false';
+        this.CONTROLCONTAINER = 'control__container';
         this.PAGINATIONITEM = 'pagination__item';
         this.activeIdx = 1;
         this.navigation = false;
@@ -75,6 +76,21 @@ class slider {
         cb();
         this.coordinateShift();
     }
+    animatePrev(_this) {
+        _this.animate(() => {
+            this.activeIdx -= 1;
+        })
+    }
+    animateNext(_this) {
+        _this.animate(() => {
+            this.activeIdx += 1;
+        })
+    }
+    changeBackAndForth(cb) {
+        cb();
+        this.coordinateShift();
+        this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
+    }
     setNavigationHTML() {
         const navigation = document.createElement('div');
         navigation.className = this.NAVIGATIONNAME;
@@ -84,6 +100,7 @@ class slider {
         this.selector.appendChild = '<div></div>';
     }
     setNavigationAct() {
+        const _this = this;
         const PREVBTN = document.querySelector(this.PREVBTN);
         const NEXTBTN = document.querySelector(this.NEXTBTN);
 
@@ -95,30 +112,32 @@ class slider {
             this.fired = false;
 
             if (this.activeIdx === this.realItems.length) {
-                this.activeIdx = 0;
-                this.coordinateShift();
-                this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
-                return;
+                this.changeBackAndForth(() => {
+                    this.activeIdx = 0;
+                })
             }
 
             if (!this.activeIdx) {
-                this.activeIdx = this.realItems.length;
-                this.coordinateShift();
-                this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
-                return;
+                this.changeBackAndForth(() => {
+                    this.activeIdx = this.realItems.length;
+                })
             }
+
+            if (this.activeIdx > this.realItems.length) {
+                this.changeBackAndForth(() => {
+                    this.activeIdx = this.activeIdx - this.realItems.length;
+                })
+            }
+
+            if (this.pagination) this.chanePaginationActive();
         };
 
         PREVBTN.addEventListener('click', () => {
-            this.animate(() => {
-                this.activeIdx -= 1;
-            })
+            this.animatePrev(_this);
         });
 
         NEXTBTN.addEventListener('click', () => {
-            this.animate(() => {
-                this.activeIdx += 1;
-            })
+            this.animateNext(_this);
         });
     }
     navigationInit() {
@@ -173,9 +192,10 @@ class slider {
         this.makeCloneHTML();
         this.coordinateShift();
         this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
-
+console.log(this.pagination)
         if (this.navigation) this.navigationInit();
         if (this.pagination) this.paginationInit();
         if (this.autoPlay) this.autoPlayInit();
+        if (this.controlPlay) this.controlPlayInit();
     }
 }
