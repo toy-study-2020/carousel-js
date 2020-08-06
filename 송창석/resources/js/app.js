@@ -110,8 +110,6 @@ const carousel = (options) => {
     const pauseplay = () => {
         clearInterval(interval);
     }
-
-
     if(autoplay) {
         startplay();
     }
@@ -120,6 +118,7 @@ const carousel = (options) => {
     pauseButton.addEventListener('click', pauseplay);
 }
 
+// 기본크기계산
 const itemSize = (item, space) => {
     const width = () => {
         let size = 0;
@@ -143,6 +142,7 @@ const itemSize = (item, space) => {
     return sizeObject;
 }
 
+// 기본크기적용
 const setDefaultSize = (wrapper, list, item, initIdx, size) => {
     // item
     item.forEach(element => {
