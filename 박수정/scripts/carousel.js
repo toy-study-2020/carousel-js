@@ -16,7 +16,7 @@ class slider {
         this.activeIdx = 1;
         this.navigation = false;
         this.pagination = false;
-        this.autoPlay = false;
+        this.autoPlay = true;
         this.controlPlayer = false;
         this.$wrapper = null;
         this.$controllerContainer = document.createElement('div');
