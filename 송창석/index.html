@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
   <link rel="stylesheet" href="resources/css/reset.css">
   <link rel="stylesheet" href="resources/css/style.css">
   <title>carousel slide</title>
@@ -14,15 +15,21 @@
                 <a href="https://im-developer.tistory.com/97" target="_blank">참고링크</a>
             </div>
             <section id="carousel" class="container">
-                <ul class="wrapper">
-                    <li class="item item1"><i class="num">1</i><span class="img"><img src="resources/images/img01.jpg" alt=""></span></li>
-                    <li class="item item2"><i class="num">2</i><span class="img"><img src="resources/images/img02.jpg" alt=""></span></li>
-                    <li class="item item3"><i class="num">3</i><span class="img"><img src="resources/images/img03.jpg" alt=""></span></li>
-                    <li class="item item4"><i class="num">4</i><span class="img"><img src="resources/images/img04.jpg" alt=""></span></li>
-                </ul>
+                <div class="wrapper">
+                    <ul class="list">
+                        <li class="item item1"><i class="num">1</i><span class="img"><img src="resources/images/img01.jpg" alt=""></span></li>
+                        <li class="item item2"><i class="num">2</i><span class="img"><img src="resources/images/img02.jpg" alt=""></span></li>
+                        <li class="item item3"><i class="num">3</i><span class="img"><img src="resources/images/img03.jpg" alt=""></span></li>
+                        <li class="item item4"><i class="num">4</i><span class="img"><img src="resources/images/img04.jpg" alt=""></span></li>
+                    </ul>
+                </div>
                 <div class="arrows-button">
-                    <button class="arrow prev"><i class="hide">prev</i></button>
-                    <button class="arrow next"><i class="hide">next</i></button>
+                    <i class="fas fa-chevron-circle-left arrow prev"></i>
+                    <i class="fas fa-chevron-circle-right arrow next"></i>
+                </div>
+                <div class="play-button">
+                    <i class="fas fa-play-circle play"></i>
+                    <i class="fas fa-pause-circle pause"></i>
                 </div>
             </section>
         </div>

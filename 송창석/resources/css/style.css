@@ -11,17 +11,16 @@
 /* content */
 
 /* carousel */
-.container{overflow:hidden;display:inline-block;width:100%;position:relative;margin: 0 auto}
-.wrapper{height:100%}
-.wrapper:after{content:'';display:block;clear:both}
+.container{display:inline-block;position:relative}
+.wrapper{overflow:hidden;margin: 0 auto}
+.list{height:100%}
+.list:after{content:'';display:block;clear:both}
 .item{float:left;height:100%;position:relative}
 .item .num{width:30px;line-height:30px;position:absolute;left:0;top:0;color:#fff;background-color:#000;font-size:20px}
 
 /* arrow */
-.arrow{width:40px;height:40px;position:absolute;top:50%;margin-top:-20px;border-radius:50%;background-color:rgba(0,0,0,0.5);z-index:2;cursor:pointer}
-.arrow:hover{background-color:rgba(0,0,0,0.8)}
-.arrow:after{content:'';display:block;width:10px;height:10px;margin:0 auto;border-right:2px solid #fff;border-bottom:2px solid #fff}
-.arrow.prev{left:0}
-.arrow.next{right:0}
-.arrow.prev:after{transform:rotate(-225deg);}
-.arrow.next:after{transform:rotate(-45deg);}
+.arrow{position:absolute;top:50%;z-index:2;cursor:pointer;font-size:35px}
+.arrow.prev{left:-50px}
+.arrow.next{right:-50px}
+.play-button{margin-top:10px}
+.play-button i{font-size:35px;cursor:pointer}
