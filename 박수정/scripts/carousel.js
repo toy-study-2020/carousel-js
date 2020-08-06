@@ -109,8 +109,7 @@ class slider {
         this.setNavigationHTML();
         this.setNavigationAct();
     }
-    coordinateShift(time) {
-        this.allItems = document.querySelectorAll(this.ITEM);
+    coordinateShift() {
         this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
     }
     animate(cb) {
