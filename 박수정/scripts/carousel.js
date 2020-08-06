@@ -12,6 +12,7 @@ class slider {
         this.activeIdx = 1;
         this.navigation = false;
         this.pagination = false;
+        this.autoPlay = false;
         this.$wrapper = null;
         this.$paginatioContainer = null;
         this.containerWidth = null;
@@ -21,6 +22,7 @@ class slider {
         if (option) {
             this.navigation = option.navigation;
             this.pagination = option.pagination;
+            this.autoPlay = option.autoPlay;
         }
     }
     setInitHTML() {
@@ -158,6 +160,13 @@ class slider {
         this.setPaginationHTML();
         this.chanePaginationActive();
     }
+    autoPlayInit() {
+        const _this = this;
+
+        setInterval(()=> {
+            this.animateNext(_this);
+        }, 3000);
+    }
     init() {
         this.setInitHTML();
         this.setWidthSTYLE();
@@ -167,5 +176,6 @@ class slider {
 
         if (this.navigation) this.navigationInit();
         if (this.pagination) this.paginationInit();
+        if (this.autoPlay) this.autoPlayInit();
     }
 }
