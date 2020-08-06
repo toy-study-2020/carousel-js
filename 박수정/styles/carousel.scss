@@ -12,7 +12,7 @@
         display: flex;
         justify-content: flex-start;
         align-content: center;
-        transition: left .5s ease;
+        transition: left .3s ease;
 
         &.transition--false {
             transition: none;
