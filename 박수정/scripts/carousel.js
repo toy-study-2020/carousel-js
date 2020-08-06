@@ -5,9 +5,9 @@ class slider {
         this.WRAPPERRNAME = 'slider__wrapper';
         this.ITEM = '.slider__item';
         this.NAVIGATIONNAME = 'slider__navigation';
-        this.prevBtn = '.slider__navigation--prev';
-        this.nextBtn = '.slider__navigation--next';
-        this.controlTransitionClass = 'transition--false'
+        this.PREVBTN = '.slider__navigation__btn--prev';
+        this.NEXTBTN = '.slider__navigation__btn--next';
+        this.CONTROLTRANSITIONCLASS = 'transition--false'
         this.activeIdx = 1;
         this.navigation = false;
         this.$wrapper = null;
@@ -31,7 +31,7 @@ class slider {
         wrapper.className = this.WRAPPERRNAME;
         this.$wrapper = document.querySelector(`.${this.WRAPPERRNAME}`);
     }
-    setWidth() {
+    setWidthSTYLE() {
         this.realItems = document.querySelectorAll(this.ITEM);
         let getWidth = this.realItems[0].offsetWidth;
 
@@ -62,14 +62,14 @@ class slider {
     setNavigationHTML() {
         const navigation = document.createElement('div');
         navigation.className = this.NAVIGATIONNAME;
-        navigation.innerHTML = '<button type="button" class="slider__navigation--prev">이전</button><button type=""button" class="slider__navigation--next">다음</button>';
+        navigation.innerHTML = '<button type="button" class="slider__navigation__btn--prev">이전</button><button type=""button" class="slider__navigation__btn--next">다음</button>';
 
         this.selector.appendChild(navigation);
         this.selector.appendChild = '<div></div>';
     }
     setNavigationAct() {
-        const prevBtn = document.querySelector(this.prevBtn);
-        const nextBtn = document.querySelector(this.nextBtn);
+        const PREVBTN = document.querySelector(this.PREVBTN);
+        const NEXTBTN = document.querySelector(this.NEXTBTN);
 
         this.$wrapper.addEventListener('transitionstart', () => {
             this.fired = true;
@@ -81,25 +81,25 @@ class slider {
             if (this.activeIdx === this.realItems.length) {
                 this.activeIdx = 0;
                 this.coordinateShift();
-                this.$wrapper.classList.add(this.controlTransitionClass);
+                this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
                 return;
             }
 
             if (!this.activeIdx) {
                 this.activeIdx = this.realItems.length;
                 this.coordinateShift();
-                this.$wrapper.classList.add(this.controlTransitionClass);
+                this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
                 return;
             }
         };
 
-        prevBtn.addEventListener('click', () => {
+        PREVBTN.addEventListener('click', () => {
             this.animate(() => {
                 this.activeIdx -= 1;
             })
         });
 
-        nextBtn.addEventListener('click', () => {
+        NEXTBTN.addEventListener('click', () => {
             this.animate(() => {
                 this.activeIdx += 1;
             })
@@ -115,16 +115,16 @@ class slider {
     animate(cb) {
         if (this.fired) return;
 
-        this.$wrapper.classList.remove(this.controlTransitionClass);
+        this.$wrapper.classList.remove(this.CONTROLTRANSITIONCLASS);
         cb();
         this.coordinateShift();
     }
     init() {
         this.setInitHTML();
-        this.setWidth();
+        this.setWidthSTYLE();
         this.makeCloneHTML();
         this.coordinateShift();
-        this.$wrapper.classList.add(this.controlTransitionClass);
+        this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
 
         if (this.navigation) this.navigationInit();
     }
