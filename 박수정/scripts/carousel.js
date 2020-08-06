@@ -8,15 +8,19 @@ class slider {
         this.PREVBTN = '.slider__navigation__btn--prev';
         this.NEXTBTN = '.slider__navigation__btn--next';
         this.CONTROLTRANSITIONCLASS = 'transition--false'
+        this.PAGINATIONITEM = 'pagination__item';
         this.activeIdx = 1;
         this.navigation = false;
+        this.pagination = false;
         this.$wrapper = null;
+        this.$paginatioContainer = null;
         this.containerWidth = null;
         this.realItems = null;
         this.fired = false;
 
         if (option) {
             this.navigation = option.navigation;
+            this.pagination = option.pagination;
         }
     }
     setInitHTML() {
@@ -119,6 +123,41 @@ class slider {
         this.setNavigationHTML();
         this.setNavigationAct();
     }
+    setPaginationHTML() {
+        const CONTROLCONTAINER = document.createElement('div');
+        const PAGINATIONWRAPPER = document.createElement('ul');
+
+        CONTROLCONTAINER.className = this.CONTROLCONTAINER;
+        this.selector.append(CONTROLCONTAINER);
+        CONTROLCONTAINER.append(PAGINATIONWRAPPER);
+
+        for (let i = 0; i < this.realItems.length; i++) {
+            const PAGINATIONLI = document.createElement('li');
+            const PAGINATIONBTN = document.createElement('button');
+
+            PAGINATIONWRAPPER.append(PAGINATIONLI);
+            PAGINATIONBTN.type = 'button';
+            PAGINATIONLI.classList.add(this.PAGINATIONITEM);
+            PAGINATIONLI.append(PAGINATIONBTN);
+            PAGINATIONBTN.append(i + 1);
+        }
+
+        this.$paginatioContainer = CONTROLCONTAINER;
+    }
+    chanePaginationActive() {
+        const paginationLi = document.querySelectorAll(`.${this.CONTROLCONTAINER} li`);
+        let activeIdx;
+
+        for (var i = 0; i < paginationLi.length; i++) {
+            paginationLi[i].classList.remove(`${this.PAGINATIONITEM}--active`);
+        }
+
+        paginationLi[this.activeIdx - 1].classList.add(`${this.PAGINATIONITEM}--active`);
+    }
+    paginationInit() {
+        this.setPaginationHTML();
+        this.chanePaginationActive();
+    }
     init() {
         this.setInitHTML();
         this.setWidthSTYLE();
@@ -127,5 +166,6 @@ class slider {
         this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
 
         if (this.navigation) this.navigationInit();
+        if (this.pagination) this.paginationInit();
     }
 }
