@@ -36,22 +36,31 @@
     }
 }
 
-.control__container {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-
-    ul {
+.control {
+    &__container {
         display: flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
 
-        li {
-            &:not(:first-child) {
-                margin-left: 7px;
+        ul {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            li {
+                &:not(:first-child) {
+                    margin-left: 7px;
+                }
+
             }
-
         }
+    }
+
+    &__player:not(:first-child) {
+        margin-left: 10px;
     }
 }
 

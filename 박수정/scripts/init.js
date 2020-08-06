@@ -2,7 +2,8 @@ window.onload = function () {
     const option = {
         navigation: true,
         pagination: true,
-        autoPlay: true
+        autoPlay: true,
+        controlPlay: true
     }
     // const sliderTest = new slider('.user-slider');
     const sliderTest = new slider('.user-slider', option);

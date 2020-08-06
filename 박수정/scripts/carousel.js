@@ -9,21 +9,31 @@ class slider {
         this.NEXTBTN = '.slider__navigation__btn--next';
         this.CONTROLTRANSITIONCLASS = 'transition--false';
         this.CONTROLCONTAINER = 'control__container';
+        this.CONTROLPLAYERBTN = 'control__player';
         this.PAGINATIONITEM = 'pagination__item';
+        this.CONTROLPLAYERCLASS = 'player--false';
+        this.CONTROLPLAYERSTATEARR = ['정지', '재생'];
         this.activeIdx = 1;
         this.navigation = false;
         this.pagination = false;
         this.autoPlay = false;
+        this.controlPlayer = false;
         this.$wrapper = null;
-        this.$paginatioContainer = null;
+        this.$controllerContainer = document.createElement('div');
         this.containerWidth = null;
         this.realItems = null;
+        this.playerTimer = null;
         this.fired = false;
 
         if (option) {
             this.navigation = option.navigation;
             this.pagination = option.pagination;
             this.autoPlay = option.autoPlay;
+            this.controlPlayer = option.controlPlay;
+        }
+
+        if (this.controlPlayer) {
+            this.$playerBtn = document.createElement('button');
         }
     }
     setInitHTML() {
@@ -144,13 +154,16 @@ class slider {
         this.setNavigationHTML();
         this.setNavigationAct();
     }
+    makeControlContainer() {
+        if (!document.querySelector(`.${this.CONTROLCONTAINER}`)) {
+            this.$controllerContainer.className = this.CONTROLCONTAINER;
+            this.selector.append(this.$controllerContainer);
+        }
+    }
     setPaginationHTML() {
-        const CONTROLCONTAINER = document.createElement('div');
+        this.makeControlContainer();
         const PAGINATIONWRAPPER = document.createElement('ul');
-
-        CONTROLCONTAINER.className = this.CONTROLCONTAINER;
-        this.selector.append(CONTROLCONTAINER);
-        CONTROLCONTAINER.append(PAGINATIONWRAPPER);
+        this.$controllerContainer.append(PAGINATIONWRAPPER);
 
         for (let i = 0; i < this.realItems.length; i++) {
             const PAGINATIONLI = document.createElement('li');
@@ -162,8 +175,6 @@ class slider {
             PAGINATIONLI.append(PAGINATIONBTN);
             PAGINATIONBTN.append(i + 1);
         }
-
-        this.$paginatioContainer = CONTROLCONTAINER;
     }
     chanePaginationActive() {
         const paginationLi = document.querySelectorAll(`.${this.CONTROLCONTAINER} li`);
@@ -182,9 +193,34 @@ class slider {
     autoPlayInit() {
         const _this = this;
 
-        setInterval(()=> {
+        if (this.playerTimer !== null) return;
+        this.playerTimer = setInterval(()=> {
             this.animateNext(_this);
         }, 3000);
+    }
+    setPlayerHTML() {
+        this.makeControlContainer();
+        this.$playerBtn.type = 'button';
+        this.$playerBtn.innerText = this.CONTROLPLAYERSTATEARR[0];
+        this.$playerBtn.classList.add(this.CONTROLPLAYERBTN);
+        this.$controllerContainer.append(this.$playerBtn);
+    }
+    controlPlay() {
+        this.$playerBtn.addEventListener('click', () => {
+            this.$playerBtn.classList.toggle(this.CONTROLPLAYERCLASS);
+            this.$playerBtn.innerText = this.CONTROLPLAYERSTATEARR[Number(this.$playerBtn.classList.contains(this.CONTROLPLAYERCLASS))];
+
+            if (this.$playerBtn.classList.contains(this.CONTROLPLAYERCLASS)) {
+                clearInterval(this.playerTimer);
+                this.playerTimer = null;
+            } else {
+                this.autoPlayInit();
+            }
+        });
+    }
+    controlPlayerInit() {
+        this.setPlayerHTML()
+        this.controlPlay();
     }
     init() {
         this.setInitHTML();
@@ -192,10 +228,10 @@ class slider {
         this.makeCloneHTML();
         this.coordinateShift();
         this.$wrapper.classList.add(this.CONTROLTRANSITIONCLASS);
-console.log(this.pagination)
+
         if (this.navigation) this.navigationInit();
         if (this.pagination) this.paginationInit();
         if (this.autoPlay) this.autoPlayInit();
-        if (this.controlPlay) this.controlPlayInit();
+        if (this.controlPlayer) this.controlPlayerInit();
     }
 }
