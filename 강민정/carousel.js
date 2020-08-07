@@ -88,6 +88,30 @@
   Carousel.prototype.createEl = function(el) {
     return document.createElement(el);
   };
+
+  Carousel.prototype.createControl = function() {
+    this.controlList = this.createEl('div');
+    this.controlPrev = this.createEl('button');
+    this.controlNext = this.createEl('button');
+    this.controlList.classList.add('carouselController');
+    this.setControl();
+  };
+
+  Carousel.prototype.setControl = function() {
+    this.controlPrev.setAttribute('data-direction', 'prev');
+    this.controlNext.setAttribute('data-direction', 'next');
+    this.controlPrev.innerText = 'prev';
+    this.controlNext.innerText = 'next';
+    this.controlPrev.addEventListener('click', this.handlerControl.bind(this));
+    this.controlNext.addEventListener('click', this.handlerControl.bind(this));
+    this.appendControl();
+  };
+
+  Carousel.prototype.appendControl = function() {
+    this.controlList.appendChild(this.controlPrev);
+    this.controlList.appendChild(this.controlNext);
+    this.appendCarousel(this.controlList);
+  }
   };
 
   const domReady = () => {
