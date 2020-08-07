@@ -143,6 +143,43 @@
     this.onMove(this.targetData);
   };
 
+  Carousel.prototype.onMove = function(d) {
+    if (d === 'prev') {
+      this.index = this.index === 0 ? this.lengthEl : this.index - 1;
+    } else {
+      this.index = this.index === this.lengthEl + 1 ? 0 : this.index + 1;
+    }
+
+    this.onAnimate();
+    this.onIndicator(this.index);
+  };
+
+  Carousel.prototype.onAnimate = function() {
+    this.moveTransform = this.wrapperWidth * this.index * -1;
+    this.elWrapper.style.transition = 'all .3s';
+    this.elWrapper.style.transform = 'translateX(' + this.moveTransform + 'px)';
+
+    if (this.index === this.lengthEl + 1) {
+      this.onAnimateClone('last');
+    }
+
+    if (this.index === 0) {
+      this.onAnimateClone('first');
+    }
+  };
+
+  Carousel.prototype.onAnimateClone = function(state) {
+    setTimeout(function () {
+        this.elWrapper.style.transition = 'all 0s';
+      if (state === 'last') {
+        this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * -1 + 'px)';
+        this.index = 1;
+      } else {
+        this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * this.lengthEl * -1 + 'px)';
+        this.index = this.lengthEl;
+      }
+    }.bind(this), 300);
+  };
   const domReady = () => {
     const carousel = new Carousel({
       wrapper: '.makeCarousel',
