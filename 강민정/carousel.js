@@ -55,9 +55,17 @@
   };
 
   Carousel.prototype.init = function() {
-    console.log('carousel init');
     this.wrapper.classList.add('carouselWrapper');
     this.elWrapper.classList.add('carousel');
+    this.wrapperWidth = this.wrapper.offsetWidth;
+
+    if (this.loop) {
+      this.clone(this.el[0], 'append');
+      this.clone(this.el[this.lengthEl - 1], 'prepend');
+    }
+
+    this.setWidth();
+  };
 
     this.endEvent();
   };
