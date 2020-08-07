@@ -190,6 +190,20 @@
       }
     }.bind(this), 300);
   };
+
+  Carousel.prototype.onIndicator = function(i) {
+    for (let i = 0; i < this.lengthEl; i++) {
+      this.indicatorList.querySelectorAll('li')[i].classList.remove('active');
+    }
+    this.indexIndicator =
+      i === this.lengthEl + 1
+        ? 0
+        : i === 0
+        ? this.lengthEl - 1
+        : i - 1;
+    this.indicatorList.querySelector('li[data-index="' + this.indexIndicator  + '"]').classList.add('active');
+  }
+
   const domReady = () => {
     const carousel = new Carousel({
       wrapper: '.makeCarousel',
