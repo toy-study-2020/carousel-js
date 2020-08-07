@@ -18,7 +18,11 @@
     }
 
     this.mode = args.mode ? args.mode : defaults.mode;
-    this.wrapper = document.querySelector(args.wrapper);
+    this.wrapperType = typeof args;
+    this.wrapper =
+      this.wrapperType === 'object'
+        ? document.querySelector(args.wrapper)
+        : document.querySelector(args);
     this.elWrapper =
       args.elWrapper
         ? this.wrapper.querySelector(args.elWrapper)
@@ -28,6 +32,10 @@
         ? this.elWrapper.querySelectorAll(args.el)
         : this.elWrapper.querySelectorAll(defaults.el);
     this.slideView = args.slideView ? args.slideView : 1;
+    this.control = args.control ? args.control : defaults.control;
+    this.indicator = args.indicator ? args.indicator : defaults.indicator;
+    this.loop = args.loop ? args.loop : defaults.loop;
+    this.autoplay = args.autoplay ? args.autoplay : defaults.autoplay;
     this.endEvent = args.endEvent ? args.endEvent : defaults.endEvent;
 
     this.init();
