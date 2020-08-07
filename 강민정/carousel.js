@@ -226,6 +226,8 @@
         console.log('move');
       }
     });
+
+    const singleCarousel = new Carousel('.singleCarousel', 'a');
   };
 
   if (document.readyState === 'complete') {
