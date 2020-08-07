@@ -14,6 +14,7 @@
       control: 1,
       indicator: 1,
       loop: 1,
+      autoplay: 1,
       endEvent: () => {}
     }
 
