@@ -38,6 +38,9 @@
     this.loop = args.loop ? args.loop : defaults.loop;
     this.autoplay = args.autoplay ? args.autoplay : defaults.autoplay;
     this.endEvent = args.endEvent ? args.endEvent : defaults.endEvent;
+    this.lengthEl = this.el.length;
+    this.moveTarget = null;
+    this.index = 1;
 
     this.init();
   };
