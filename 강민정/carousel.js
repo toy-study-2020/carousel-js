@@ -43,6 +43,15 @@
     this.index = 1;
 
     this.init();
+
+    if (this.control) {
+      this.createControl();
+    }
+
+    if (this.indicator) {
+      this.createIndicator();
+    }
+
   };
 
   Carousel.prototype.init = function() {
