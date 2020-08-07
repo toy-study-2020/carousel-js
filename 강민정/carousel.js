@@ -85,6 +85,9 @@
     this.elWrapper.style.cssText = 'width: '+ this.wrapperWidth * this.updateLengthEl + 'px; transform: translateX(' + this.transformX + 'px);';
   };
 
+  Carousel.prototype.createEl = function(el) {
+    return document.createElement(el);
+  };
   };
 
   const domReady = () => {
