@@ -4,7 +4,8 @@ window.onload = function () {
         pagination: true,
         autoPlay: true,
         controlPlay: true,
-        timer: 1000
+        timer: 1000,
+        transitionSpeed: 100
     }
     // const sliderTest = new slider('.user-slider');
     const sliderTest = new slider('.user-slider', option);

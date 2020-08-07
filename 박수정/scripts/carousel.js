@@ -16,6 +16,7 @@ class slider {
         this.$controllerContainer = document.createElement('div');
         this.activeIdx = 1;
         this.timer = 3000;
+        this.transitionSpeed = 0;
         this.navigation = false;
         this.pagination = false;
         this.autoPlay = true;
@@ -32,6 +33,7 @@ class slider {
             this.pagination = option.pagination;
             this.autoPlay = option.autoPlay;
             this.controlPlayer = option.controlPlay;
+            this.transitionSpeed = option.transitionSpeed;
             if (option.timer) this.timer = option.timer;
         }
 
@@ -243,6 +245,13 @@ class slider {
         this.setPlayerHTML()
         this.controlPlay();
     }
+    setTransitionSpeed() {
+        const speed = `${this.transitionSpeed/1000}s`;
+        this.$wrapper.style.transitionDuration = speed;
+        for (var i = 0; i < this.paginationLi.length; i++) {
+            this.paginationLi[i].children[0].style.transitionDuration = speed;
+        }
+    }
     init() {
         this.setInitHTML();
         this.setWidthSTYLE();
@@ -254,5 +263,6 @@ class slider {
         if (this.pagination) this.paginationInit();
         if (this.autoPlay) this.autoPlayInit(this.timer);
         if (this.controlPlayer) this.controlPlayerInit();
+        if (this.transitionSpeed) this.setTransitionSpeed();
     }
 }
