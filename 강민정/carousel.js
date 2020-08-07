@@ -68,6 +68,23 @@
   };
 
     this.endEvent();
+  Carousel.prototype.setWidth = function() {
+    for (let i = 0; i < this.lengthEl; i++) {
+      if (this.slideView !== 1) {
+        return;
+      }
+      this.el[i].style.cssText = 'width: ' + this.wrapperWidth + 'px;';
+    }
+
+    this.setWrapperWidth();
+  };
+
+  Carousel.prototype.setWrapperWidth = function() {
+    this.updateLengthEl = this.loop ? this.lengthEl + 2 : this.lengthEl;
+    this.transformX = this.loop ? -1 * this.wrapperWidth : 0;
+    this.elWrapper.style.cssText = 'width: '+ this.wrapperWidth * this.updateLengthEl + 'px; transform: translateX(' + this.transformX + 'px);';
+  };
+
   };
 
   const domReady = () => {
