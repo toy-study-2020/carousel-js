@@ -14,7 +14,7 @@
 
 - [x] Pagination 제공
 
-- [ ] Pagination 버튼 클릭시 이동 기능
+- [x] Pagination 버튼 클릭시 이동 기능
 
 - [x] 재생 시간 변경 옵션
 

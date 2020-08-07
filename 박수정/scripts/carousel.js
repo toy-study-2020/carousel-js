@@ -25,6 +25,7 @@ class slider {
         this.containerWidth = null;
         this.realItems = null;
         this.playerTimer = null;
+        this.paginationLi = null;
 
         if (option) {
             this.navigation = option.navigation;
@@ -179,14 +180,28 @@ class slider {
         }
     }
     chanePaginationActive() {
-        const paginationLi = document.querySelectorAll(`.${this.CONTROLCONTAINER} li`);
+        this.paginationLi = document.querySelectorAll(`.${this.CONTROLCONTAINER} li`);
         let activeIdx;
 
-        for (var i = 0; i < paginationLi.length; i++) {
-            paginationLi[i].classList.remove(`${this.PAGINATIONITEM}--active`);
+        for (var i = 0; i < this.paginationLi.length; i++) {
+            this.paginationLi[i].classList.remove(`${this.PAGINATIONITEM}--active`);
         }
 
-        paginationLi[this.activeIdx - 1].classList.add(`${this.PAGINATIONITEM}--active`);
+        this.paginationLi[this.activeIdx - 1].classList.add(`${this.PAGINATIONITEM}--active`);
+    }
+    movePaging() {
+        const _this = this;
+        for (var i = 0; i < this.paginationLi.length; i++) {
+            {
+                (function (index) {
+                    _this.paginationLi[i].addEventListener('click', () => {
+                        _this.animate(() => {
+                            _this.activeIdx = index + 1;
+                        })
+                    });
+                })(i);
+            }
+        }
     }
     paginationInit() {
         this.setPaginationHTML();
