@@ -52,6 +52,21 @@
       this.createIndicator();
     }
 
+    this.timer = function() {
+      this.autoPlayer = setInterval(function() {
+        this.onMove('next');
+      }.bind(this), 3000);
+    }
+
+    this.timer();
+
+    this.wrapper.addEventListener('mouseenter', function() {
+      clearInterval(this.autoPlayer);
+    }.bind(this));
+
+    this.wrapper.addEventListener('mouseleave', function() {
+      this.timer();
+    }.bind(this))
   };
 
   Carousel.prototype.init = function() {
