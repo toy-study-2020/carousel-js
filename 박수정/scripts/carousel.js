@@ -13,17 +13,17 @@ class slider {
         this.PAGINATIONITEM = 'pagination__item';
         this.CONTROLPLAYERCLASS = 'player--false';
         this.CONTROLPLAYERSTATEARR = ['정지', '재생'];
+        this.$controllerContainer = document.createElement('div');
         this.activeIdx = 1;
         this.navigation = false;
         this.pagination = false;
         this.autoPlay = true;
         this.controlPlayer = false;
+        this.fired = false;
         this.$wrapper = null;
-        this.$controllerContainer = document.createElement('div');
         this.containerWidth = null;
         this.realItems = null;
         this.playerTimer = null;
-        this.fired = false;
 
         if (option) {
             this.navigation = option.navigation;
