@@ -85,6 +85,16 @@
     this.elWrapper.style.cssText = 'width: '+ this.wrapperWidth * this.updateLengthEl + 'px; transform: translateX(' + this.transformX + 'px);';
   };
 
+  Carousel.prototype.clone = function(el, direction) {
+    this.cloneEl = el.cloneNode(true);
+    this.cloneEl.style.cssText = 'width: ' + this.wrapperWidth + 'px;';
+    if (direction === 'append') {
+      this.elWrapper.appendChild(this.cloneEl);
+    } else {
+      this.elWrapper.insertBefore(this.cloneEl, this.elWrapper.firstChild)
+    }
+  };
+
   Carousel.prototype.createEl = function(el) {
     return document.createElement(el);
   };
