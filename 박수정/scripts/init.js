@@ -3,7 +3,8 @@ window.onload = function () {
         navigation: true,
         pagination: true,
         autoPlay: true,
-        controlPlay: true
+        controlPlay: true,
+        timer: 1000
     }
     // const sliderTest = new slider('.user-slider');
     const sliderTest = new slider('.user-slider', option);

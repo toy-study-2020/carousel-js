@@ -15,6 +15,7 @@ class slider {
         this.CONTROLPLAYERSTATEARR = ['정지', '재생'];
         this.$controllerContainer = document.createElement('div');
         this.activeIdx = 1;
+        this.timer = 3000;
         this.navigation = false;
         this.pagination = false;
         this.autoPlay = true;
@@ -30,6 +31,7 @@ class slider {
             this.pagination = option.pagination;
             this.autoPlay = option.autoPlay;
             this.controlPlayer = option.controlPlay;
+            if (option.timer) this.timer = option.timer;
         }
 
         if (this.controlPlayer) {
@@ -189,14 +191,19 @@ class slider {
     paginationInit() {
         this.setPaginationHTML();
         this.chanePaginationActive();
+        this.movePaging();
     }
-    autoPlayInit() {
+    clearTimer() {
+        clearInterval(this.playerTimer);
+        this.playerTimer = null;
+    }
+    autoPlayInit(timer) {
         const _this = this;
 
         if (this.playerTimer !== null) return;
         this.playerTimer = setInterval(()=> {
             this.animateNext(_this);
-        }, 3000);
+        }, timer);
     }
     setPlayerHTML() {
         this.makeControlContainer();
@@ -211,10 +218,9 @@ class slider {
             this.$playerBtn.innerText = this.CONTROLPLAYERSTATEARR[Number(this.$playerBtn.classList.contains(this.CONTROLPLAYERCLASS))];
 
             if (this.$playerBtn.classList.contains(this.CONTROLPLAYERCLASS)) {
-                clearInterval(this.playerTimer);
-                this.playerTimer = null;
+                this.clearTimer();
             } else {
-                this.autoPlayInit();
+                this.autoPlayInit(this.timer);
             }
         });
     }
@@ -231,7 +237,7 @@ class slider {
 
         if (this.navigation) this.navigationInit();
         if (this.pagination) this.paginationInit();
-        if (this.autoPlay) this.autoPlayInit();
+        if (this.autoPlay) this.autoPlayInit(this.timer);
         if (this.controlPlayer) this.controlPlayerInit();
     }
 }

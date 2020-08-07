@@ -1,5 +1,7 @@
 @charset "utf-8";
 
+$timer: .3s;
+
 .slider {
     &__container {
         position: relative;
@@ -12,7 +14,7 @@
         display: flex;
         justify-content: flex-start;
         align-content: center;
-        transition: left .3s ease;
+        transition: left $timer ease;
 
         &.transition--false {
             transition: none;
@@ -76,7 +78,7 @@
             border-radius: 50%;
             border: none;
             text-indent: -9999px;
-            transition: all .3s ease;
+            transition: all $timer ease;
         }
 
         &--active button {
