@@ -2,7 +2,7 @@
   'use strict';
 
   const Carousel = function(args) {
-    if (!args || !args.wrapper) {
+    if (!args) {
       return;
     }
 
