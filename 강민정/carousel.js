@@ -112,6 +112,35 @@
     this.controlList.appendChild(this.controlNext);
     this.appendCarousel(this.controlList);
   }
+
+  Carousel.prototype.createIndicator = function() {
+    this.indicatorList = this.createEl('ol');
+    for (let i = 0; i < this.lengthEl; i++) {
+      this.indicatorList.appendChild(this.createEl('li'));
+    }
+    this.indicatorList.classList.add('carouselIndicator');
+    this.setIndicator();
+  };
+
+  Carousel.prototype.setIndicator = function() {
+    this.indicatorEl = this.indicatorList.getElementsByTagName('li');
+    for (let i = 0; i < this.lengthEl; i++) {
+      this.indicatorEl[i].innerHTML = i + 1;
+      this.indicatorEl[i].setAttribute('data-index', i);
+      this.indicatorEl[0].classList.add('active');
+    }
+
+    this.appendCarousel(this.indicatorList);
+  }
+
+  Carousel.prototype.appendCarousel = function(el) {
+    this.wrapper.appendChild(el);
+  };
+
+  Carousel.prototype.handlerControl = function() {
+    this.moveTarget = event.target;
+    this.targetData = this.moveTarget.dataset.direction;
+    this.onMove(this.targetData);
   };
 
   const domReady = () => {
