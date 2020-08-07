@@ -66,7 +66,9 @@
 
     this.wrapper.addEventListener('mouseleave', function() {
       this.timer();
-    }.bind(this))
+    }.bind(this));
+
+    this.endEvent();
   };
 
   Carousel.prototype.init = function() {
@@ -82,7 +84,6 @@
     this.setWidth();
   };
 
-    this.endEvent();
   Carousel.prototype.setWidth = function() {
     for (let i = 0; i < this.lengthEl; i++) {
       if (this.slideView !== 1) {
@@ -223,7 +224,7 @@
     const carousel = new Carousel({
       wrapper: '.makeCarousel',
       endEvent: () => {
-        console.log('move');
+        console.log('end event');
       }
     });
 
