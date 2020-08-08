@@ -1,0 +1,114 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+body * {
+    padding: 0;
+    margin: 0;
+}
+
+.carousel {
+    display: flex;
+}
+
+.carouselWrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel > li {
+    display: flex;
+}
+
+.carouselController button[data-direction="prev"], .carouselController button[data-direction="next"] {
+    position: absolute;
+    top: calc(50% - 20px);
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: none;
+    box-shadow: 3px 3px 2px 0 rgba(0, 0, 0, 0.2);
+    text-indent: -9999px;
+    cursor: pointer;
+}
+
+.carouselController button[data-direction="prev"]:after, .carouselController button[data-direction="next"]:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border: solid 1px #000;
+    border-top: none;
+    border-left: none;
+}
+
+.carouselController button[data-direction="prev"] {
+    left: 10px;
+}
+
+.carouselController button[data-direction="prev"]:after {
+    left: 13px;
+    transform: translateY(-50%) rotate(135deg);
+}
+
+.carouselController button[data-direction="next"] {
+    right: 10px;
+}
+
+.carouselController button[data-direction="next"]:after {
+    left: 8px;
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+.carouselIndicator {
+    margin-top: 20px;
+    font-size: 0;
+    text-align: center;
+}
+
+.carouselIndicator > li {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.2);
+    vertical-align: top;
+}
+
+.carouselIndicator > li:first-child {
+    margin-left: 0;
+}
+
+.carouselIndicator > li.active {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.makeCarousel {
+    width: 600px;
+    margin: 200px auto 0;
+}
+
+.makeCarousel ul > li {
+    padding: 100px 0;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.singleCarousel {
+    margin: 100px auto 0;
+}
+
+.singleCarousel ul > li {
+    padding: 100px 0;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    justify-content: center;
+}
