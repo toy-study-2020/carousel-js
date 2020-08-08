@@ -1,4 +1,5 @@
 // carousel
+
 // clone item을 만드는 것과 그에 따른 item증가, index값 변화를 파악하는 것이 요점일듯!
 
 const carousel = (options) => {
