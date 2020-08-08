@@ -1,4 +1,4 @@
-class slider {
+class Slider {
     constructor(selector, option) {
         this.selector = document.querySelector(selector);
         this.CONTAINERNAME = 'slider__container';

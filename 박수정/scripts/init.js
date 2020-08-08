@@ -5,9 +5,10 @@ window.onload = function () {
         autoPlay: true,
         controlPlay: true,
         timer: 1000,
-        transitionSpeed: 100
+        transitionSpeed: 200
     }
-    // const sliderTest = new slider('.user-slider');
-    const sliderTest = new slider('.user-slider', option);
+
+    // const sliderTest = new Slider('.user-slider');
+    const sliderTest = new Slider('.user-slider', option);
     sliderTest.init();
 }
