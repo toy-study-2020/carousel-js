@@ -1,10 +1,8 @@
 // carousel
 
-// clone item을 만드는 것과 그에 따른 item증가, index값 변화를 파악하는 것이 요점일듯!
-
 const carousel = (options) => {
     const container = document.querySelector(options.selector);
-    const wrapper = container.children[0];
+    const wrapper = container.querySelector('.wrapper');
     const list = container.querySelector('.list');
     const item = container.querySelectorAll('.item');
     const itemLength = item.length;
@@ -53,7 +51,7 @@ const carousel = (options) => {
 
     // next, 오른쪽으로
     const moveNext = () => {
-        // console.log('next', currentIdx);
+        console.log('next');
         if(currentIdx <= itemLength - 1) {
             list.style.transition = `${speed}ms`;
             list.style.transform = `translate3d(-${moveSize * (currentIdx + 2)}px, 0px, 0px)`;
@@ -73,7 +71,7 @@ const carousel = (options) => {
 
     // prev, 왼쪽으로
     const movePrev = () => {
-        // console.log('prev', currentIdx);
+        console.log('prev');
         if(currentIdx >= 0) {
             list.style.transition = `${speed}ms`;
             list.style.transform = `translate3d(-${moveSize * currentIdx}px, 0px, 0px)`;
@@ -94,13 +92,13 @@ const carousel = (options) => {
     // autoplay
     let autoplay = options.autoplay ? options.autoplay : false;
     const timer = options.timer ? options.timer : false;
-    const setDirect = (direct) => {
+    const setDirect = (rtl) => {
         let func;
-        if(direct === 'right') func = moveNext;
-        if(direct === 'left') func = movePrev;
+        if(!rtl) func = moveNext;
+        if(rtl) func = movePrev;
         return func
     }
-    let direction = setDirect(options.direction);
+    let direction = setDirect(options.rtl);
     let interval  = null;
 
     const startplay = () => {
@@ -111,10 +109,12 @@ const carousel = (options) => {
     const pauseplay = () => {
         clearInterval(interval);
     }
+    // init
     if(autoplay) {
         startplay();
     }
 
+    // play pause button
     playButton.addEventListener('click', startplay);
     pauseButton.addEventListener('click', pauseplay);
 }
@@ -149,13 +149,13 @@ const setDefaultSize = (wrapper, list, item, initIdx, size) => {
     item.forEach(element => {
         element.style.margin = `0 ${size.space}px`;
     });
-    // wrapper
+    // list
     const listWidth = (size.width + size.space) * item.length * 2;
     const transWidth = (size.width + size.space) * (initIdx + 1) * -1;
     list.style.width =  `${listWidth}px`;
     list.style.transform = `translate3d(${transWidth}px, 0px, 0px)`;
     
-    // cotainer
+    // wrapper
     wrapper.style.width = `${size.width + size.space}px`;
     wrapper.style.height = `${size.height}px`;
 }
@@ -163,13 +163,14 @@ const setDefaultSize = (wrapper, list, item, initIdx, size) => {
 
 
 window.onload = () => {
+    //   carousel 설정
     const slide = carousel({
-        selector: '#carousel',
-        speed: 500,
-        space: 0,
-        initialindex: 0,
-        autoplay: true,
-        timer: 2000,
-        direction: 'right',
+        selector: '#carousel', // container id값
+        speed: 500, // 
+        space: 0, // item간 간격(구현x)
+        initialindex: 0, // 시작 index값
+        autoplay: true, // autoplay
+        timer: 2000, // autoplay 시간
+        // rtl: true, // 슬라이드 방향설정
     });
 }
