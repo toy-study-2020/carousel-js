@@ -33,32 +33,11 @@ function(position, idx){
 }
 ```
 
-- if문을 연쇄해서 사용하고싶지 않은데 방법이 있을까요?
+- 삼항연산자에 함수를 사용해도 되는거죠? 
 ```
-if (e.target.className === 'btn_preview' && this.currentCount >= 0) {
-  this.currentPosi += this.frameWidth;
-  this.currentCount--;
-}
-
-if (e.target.className === 'btn_next' && this.currentCount < this.slideLength) {
-  this.currentPosi -= this.frameWidth;
-  this.currentCount++;
-}
+this.setObj.direction ? this.clickNext() : this.clickPrev();
 ```
-
 - 정말 별기능이 없는 함수라도 재사용을 생각해서 함수를 쪼개는것이 좋은지에 대한 의문
-
-- 좌우버튼 하나의 이벤트함수를 걸어서 안에서 e.target.className으로 기능을 나누었는데 
-이렇게 사용해도 되나요??? 
-아니면 버튼 좌, 우 버튼 이벤트를 따로 만드는게 나은것인지? 
 
 # 어려운것들
 
-- 좌우 버튼 클릭이벤트 프로토타입 clickBtnEvt에 너무많은 조건들을 나열해 놓은것같아서 리펙토링하고싶은데 넘 어려워요...
-
-* 조건 1. 이전버튼 클릭, 맨처음에있는 클론한 인덱스가 아닐때 
-- 조건 2. 다음버튼 클릭, 맨마지막에있는 클론한 인덱스가 아닐때
-- 조건 3. 맨처음에있는 클론한 인덱스일때
-- 조건 4. 맨마지막에있는 클론한 인덱스일때
-
-- autoplay기능도 조건1, 2 이전다음버튼만 변경해서 clickBtnEvt에를 사용하려고 하는데 괜찮을까요? 
