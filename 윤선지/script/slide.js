@@ -16,7 +16,9 @@
     
     speed: .2,
     autoplay: true,
-    direction: true
+    direction: true,
+    playControl: true,
+    playControlEl: '.play_control'
   };
 
   function Slider(el, opt) {
@@ -40,9 +42,12 @@
       this.slide = this.el.querySelectorAll(this.setObj.slide);
       this.pagingEl = this.el.querySelector(this.setObj.pagingEl);
       this.controlEl = this.el.querySelector(this.setObj.controlEl);
+      this.playControlEl = this.el.querySelector(this.setObj.playControlEl);
       this.prevBtn = "";
       this.nextBtn = "";
       this.pagingBtn = "";
+      this.playControlBtn = "";
+      this.playSlide = "";
       this.cloneNum = 2;
       this.frameWidth = this.frame.clientWidth;
       this.slideLength = this.slide.length;
@@ -53,6 +58,8 @@
 
       if (this.setObj.paging) this.setPaging();
       if (this.setObj.control) this.setControl();
+      if (this.setObj.autoplay) this.setAutoplay();
+      if (this.setObj.playControl) this.setControlPlay();
     },
 
     setSlideSize: function () {
@@ -88,6 +95,18 @@
       this.nextBtn = this.controlEl.querySelector(this.setObj.nextBtn);
     },
 
+    setAutoplay: function() {
+      this.playSlide = setInterval(() => {
+        this.setObj.direction ? this.clickNext() : this.clickPrev();
+      }, 2000)
+    },
+
+    setControlPlay: function() {
+      this.playControlEl.innerHtml = `<button type="button" class="btn_play_control">정지</button>`;
+
+      this.playControlBtn = this.playControlEl.querySelector('.btn_play_control');
+    },
+
     cloneSlide: function () {
       let firstSlide = this.slide[0].cloneNode(true),
       lastSlide = this.slide[this.slideLength - 1].cloneNode(true);
@@ -100,14 +119,18 @@
 
     eventBind: function() {
       if (this.setObj.control) {
-        this.prevBtn.addEventListener('click', this.clickBtnEvt.bind(this));
-        this.nextBtn.addEventListener('click', this.clickBtnEvt.bind(this));
+        this.prevBtn.addEventListener('click', this.clickPrev.bind(this));
+        this.nextBtn.addEventListener('click', this.clickNext.bind(this));
       }
         
       if (this.setObj.paging) {
         this.pagingBtn.forEach((pagingBtn, idx) => {
           pagingBtn.addEventListener('click', this.clickPaging.bind(this, idx));
         });
+      }
+
+      if (this.setObj.playControl) {
+        this.playControlBtn.addEventListener('click', this.playControlEvt.bind(this));
       }
     },
 
@@ -133,39 +156,47 @@
       });
     },
 
-    clickBtnEvt: function(e) {
+    clickPrev: function(){
       if (this.eventFlag) return;
+
+      this.currentPosi += this.frameWidth;
+      this.currentCount--;
+      this.moveSlide(this.currentPosi);
+      this.clickBtnEvt();
+    },
+
+    clickNext: function(){
+      if (this.eventFlag) return;
+
+      this.currentPosi -= this.frameWidth;
+      this.currentCount++;
+      this.moveSlide(this.currentPosi);
+      this.clickBtnEvt();
+    },
+
+    clickBtnEvt: function(e) {
       this.eventFlag = true;
 
-      if (e.target.className === 'btn_preview' && this.currentCount >= 0) {
-        this.currentPosi += this.frameWidth;
-        this.currentCount--;
-      }
-      
-      if (e.target.className === 'btn_next' && this.currentCount < this.slideLength) {
-        this.currentPosi -= this.frameWidth;
-        this.currentCount++;
-      }
-  
-      this.moveSlide(this.currentPosi);
-      setTimeout(() => { this.eventFlag = false; }, 200);
+      if (this.currentCount < 0) {
+        this.currentCount = this.slideLength - 1;
+        this.currentPosi = -this.frameWidth * this.slideLength;
+      };
 
-      if(this.currentCount < 0 || this.currentCount >= this.slideLength) {
-        if (this.currentCount < 0) {
-          this.currentCount = this.slideLength - 1;
-          this.currentPosi = -this.frameWidth * this.slideLength;
-        };
-  
-        if (this.currentCount >= this.slideLength) {
-          this.currentCount = 0;
-          this.currentPosi = -this.frameWidth;
-        };
-  
-        setTimeout(() => {
-          this.moveSlide(this.currentPosi, 0);
-        }, 200);
-        if (this.setObj.paging) this.togglePaging();
-      }
+      if (this.currentCount >= this.slideLength) {
+        this.currentCount = 0;
+        this.currentPosi = -this.frameWidth;
+      };
+
+      setTimeout(() => {
+        this.moveSlide(this.currentPosi, 0);
+      }, 200);
+      if (this.setObj.paging) this.togglePaging();
+
+      setTimeout(() => { this.eventFlag = false; }, 200);
+    },
+
+    playControlEvt: function() {
+      clearInterval(this.playSlide);
     }
   };
 
