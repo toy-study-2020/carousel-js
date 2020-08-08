@@ -144,7 +144,7 @@ class Slider {
                 })
             }
 
-            if (this.pagination) this.chanePaginationActive();
+            if (this.pagination) this.changePaginationActive();
         };
 
         PREVBTN.addEventListener('click', () => {
@@ -181,7 +181,7 @@ class Slider {
             PAGINATIONBTN.append(i + 1);
         }
     }
-    chanePaginationActive() {
+    changePaginationActive() {
         this.paginationLi = document.querySelectorAll(`.${this.CONTROLCONTAINER} li`);
         let activeIdx;
 
@@ -207,7 +207,7 @@ class Slider {
     }
     paginationInit() {
         this.setPaginationHTML();
-        this.chanePaginationActive();
+        this.changePaginationActive();
         this.movePaging();
     }
     clearTimer() {
