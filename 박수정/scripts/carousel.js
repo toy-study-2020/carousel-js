@@ -1,19 +1,19 @@
 class Slider {
     constructor(selector, option) {
         this.selector = document.querySelector(selector);
-        this.containername = 'slider__container';
+        this.containernName = 'slider__container';
         this.wrapperName = 'slider__wrapper';
         this.item = '.slider__item';
-        this.navigationname = 'slider__navigation';
-        this.prevbtn = '.slider__navigation__btn--prev';
-        this.nextbtn = '.slider__navigation__btn--next';
-        this.controltransitionclass = 'transition--false';
-        this.controlcontainer = 'control__container';
-        this.controlplayerbtn = 'control__player';
-        this.PAGINATIONitem = 'pagination__item';
-        this.controlplayerclass = 'player--false';
-        this.controlplayerstatearr = ['정지', '재생'];
-        this.$controllerContainer = document.createElement('div');
+        this.navigationName = 'slider__navigation';
+        this.prevBtn = '.slider__navigation__btn--prev';
+        this.nextBtn = '.slider__navigation__btn--next';
+        this.controlTransitionClass = 'transition--false';
+        this.controlContainer = 'control__container';
+        this.controlPlayerBtn = 'control__player';
+        this.paginationItem = 'pagination__item';
+        this.controlPlayerClass = 'player--false';
+        this.controlPlayerStateArr = ['정지', '재생'];
+        this.controllerContainer = document.createElement('div');
         this.activeIdx = 1;
         this.timer = 3000;
         this.transitionSpeed = 0;
@@ -45,7 +45,7 @@ class Slider {
         const wrapper = document.createElement('div');
         const slideItemHTML = this.selector.innerHTML;
 
-        this.selector.classList.add(this.containername);
+        this.selector.classList.add(this.containernName);
         this.selector.innerHTML = '';
         this.selector.appendChild(wrapper);
 
@@ -87,7 +87,7 @@ class Slider {
     animate(cb) {
         if (this.fired) return;
 
-        this.$wrapper.classList.remove(this.controltransitionclass);
+        this.$wrapper.classList.remove(this.controlTransitionClass);
         cb();
         this.coordinateShift();
     }
@@ -104,20 +104,19 @@ class Slider {
     changeBackAndForth(cb) {
         cb();
         this.coordinateShift();
-        this.$wrapper.classList.add(this.controltransitionclass);
+        this.$wrapper.classList.add(this.controlTransitionClass);
     }
     setNavigationHTML() {
         const navigation = document.createElement('div');
-        navigation.className = this.navigationname;
+        navigation.className = this.navigationName;
         navigation.innerHTML = '<button type="button" class="slider__navigation__btn--prev">이전</button><button type=""button" class="slider__navigation__btn--next">다음</button>';
 
         this.selector.appendChild(navigation);
         this.selector.appendChild = '<div></div>';
     }
     setNavigationAct() {
-        const _this = this;
-        const prevbtn = document.querySelector(this.prevbtn);
-        const nextbtn = document.querySelector(this.nextbtn);
+        const prevBtn = document.querySelector(this.prevBtn);
+        const nextBtn = document.querySelector(this.nextBtn);
 
         this.$wrapper.addEventListener('transitionstart', () => {
             this.fired = true;
@@ -147,12 +146,12 @@ class Slider {
             if (this.pagination) this.changePaginationActive();
         };
 
-        prevbtn.addEventListener('click', () => {
-            this.animatePrev(_this);
+        prevBtn.addEventListener('click', () => {
+            this.animatePrev(this);
         });
 
-        nextbtn.addEventListener('click', () => {
-            this.animateNext(_this);
+        nextBtn.addEventListener('click', () => {
+            this.animateNext(this);
         });
     }
     navigationInit() {
@@ -160,15 +159,15 @@ class Slider {
         this.setNavigationAct();
     }
     makeControlContainer() {
-        if (!document.querySelector(`.${this.controlcontainer}`)) {
-            this.$controllerContainer.className = this.controlcontainer;
-            this.selector.append(this.$controllerContainer);
+        if (!document.querySelector(`.${this.controlContainer}`)) {
+            this.controllerContainer.className = this.controlContainer;
+            this.selector.append(this.controllerContainer);
         }
     }
     setPaginationHTML() {
         this.makeControlContainer();
         const PAGINATIONWRAPPER = document.createElement('ul');
-        this.$controllerContainer.append(PAGINATIONWRAPPER);
+        this.controllerContainer.append(PAGINATIONWRAPPER);
 
         for (let i = 0; i < this.realItems.length; i++) {
             const PAGINATIONLI = document.createElement('li');
@@ -176,20 +175,20 @@ class Slider {
 
             PAGINATIONWRAPPER.append(PAGINATIONLI);
             PAGINATIONBTN.type = 'button';
-            PAGINATIONLI.classList.add(this.PAGINATIONitem);
+            PAGINATIONLI.classList.add(this.paginationItem);
             PAGINATIONLI.append(PAGINATIONBTN);
             PAGINATIONBTN.append(i + 1);
         }
     }
     changePaginationActive() {
-        this.paginationLi = document.querySelectorAll(`.${this.controlcontainer} li`);
+        this.paginationLi = document.querySelectorAll(`.${this.controlContainer} li`);
         let activeIdx;
 
         for (var i = 0; i < this.paginationLi.length; i++) {
-            this.paginationLi[i].classList.remove(`${this.PAGINATIONitem}--active`);
+            this.paginationLi[i].classList.remove(`${this.paginationItem}--active`);
         }
 
-        this.paginationLi[this.activeIdx - 1].classList.add(`${this.PAGINATIONitem}--active`);
+        this.paginationLi[this.activeIdx - 1].classList.add(`${this.paginationItem}--active`);
     }
     movePaging() {
         const _this = this;
@@ -225,16 +224,16 @@ class Slider {
     setPlayerHTML() {
         this.makeControlContainer();
         this.$playerBtn.type = 'button';
-        this.$playerBtn.innerText = this.controlplayerstatearr[0];
-        this.$playerBtn.classList.add(this.controlplayerbtn);
-        this.$controllerContainer.append(this.$playerBtn);
+        this.$playerBtn.innerText = this.controlPlayerStateArr[0];
+        this.$playerBtn.classList.add(this.controlPlayerBtn);
+        this.controllerContainer.append(this.$playerBtn);
     }
     controlPlay() {
         this.$playerBtn.addEventListener('click', () => {
-            this.$playerBtn.classList.toggle(this.controlplayerclass);
-            this.$playerBtn.innerText = this.controlplayerstatearr[Number(this.$playerBtn.classList.contains(this.controlplayerclass))];
+            this.$playerBtn.classList.toggle(this.controlPlayerClass);
+            this.$playerBtn.innerText = this.controlPlayerStateArr[Number(this.$playerBtn.classList.contains(this.controlPlayerClass))];
 
-            if (this.$playerBtn.classList.contains(this.controlplayerclass)) {
+            if (this.$playerBtn.classList.contains(this.controlPlayerClass)) {
                 this.clearTimer();
             } else {
                 this.autoPlayInit(this.timer);
@@ -257,7 +256,7 @@ class Slider {
         this.setWidthSTYLE();
         this.makeCloneHTML();
         this.coordinateShift();
-        this.$wrapper.classList.add(this.controltransitionclass);
+        this.$wrapper.classList.add(this.controlTransitionClass);
 
         if (this.navigation) this.navigationInit();
         if (this.pagination) this.paginationInit();
