@@ -6,7 +6,7 @@
 
 ```js
 const sliderTest = new slider('.user-slider');
-sliderTest.init();
+sliderTest();
 ```
 
 <br>
@@ -24,7 +24,7 @@ const option = {
 }
 
 const sliderTest = new slider('.user-slider', option);
-sliderTest.init();
+sliderTest();
 ```
 
 <br>
