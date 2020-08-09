@@ -15,12 +15,11 @@
 .wrapper{overflow:hidden;margin: 0 auto}
 .list{height:100%}
 .list:after{content:'';display:block;clear:both}
-.item{float:left;height:100%;position:relative}
-.item .num{width:30px;line-height:30px;position:absolute;left:0;top:0;color:#fff;background-color:#000;font-size:20px}
+.slide{float:left;height:100%;position:relative}
+.slide .num{width:30px;line-height:30px;position:absolute;left:0;top:0;color:#fff;background-color:#000;font-size:20px}
 
 /* arrow */
-.arrow{position:absolute;top:50%;z-index:2;cursor:pointer;font-size:35px}
-.arrow.prev{left:-50px}
-.arrow.next{right:-50px}
-.play-button{margin-top:10px}
-.play-button i{font-size:35px;cursor:pointer}
+.arrows-button button{position:absolute;top:50%;z-index:2;cursor:pointer;font-size:35px;background-color:transparent}
+.arrows-button .prev{left:-50px}
+.arrows-button .next{right:-50px}
+.play-button{margin-top:10px;font-size:35px;cursor:pointer;background-color:transparent}
