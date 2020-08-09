@@ -22,7 +22,7 @@ class Slider {
         this.autoPlay = true;
         this.controlPlayer = false;
         this.fired = false;
-        this.$wrapper = null;
+        this.wrapper = null;
         this.containerWidth = null;
         this.realItems = null;
         this.playerTimer = null;
@@ -38,7 +38,7 @@ class Slider {
         }
 
         if (this.controlPlayer) {
-            this.$playerBtn = document.createElement('button');
+            this.playerBtn = document.createElement('button');
         }
     }
     setInitHTML() {
@@ -51,7 +51,7 @@ class Slider {
 
         wrapper.innerHTML = slideItemHTML;
         wrapper.className = this.wrapperName;
-        this.$wrapper = document.querySelector(`.${this.wrapperName}`);
+        this.wrapper = document.querySelector(`.${this.wrapperName}`);
     }
     setWidthSTYLE() {
         this.realItems = document.querySelectorAll(this.item);
@@ -78,16 +78,16 @@ class Slider {
         const firstItem = this.realItems[0].cloneNode(true);
         const lastItem = this.realItems[this.realItems.length - 1].cloneNode(true);
 
-        this.$wrapper.appendChild(firstItem)
-        this.$wrapper.prepend(lastItem)
+        this.wrapper.appendChild(firstItem)
+        this.wrapper.prepend(lastItem)
     }
     coordinateShift() {
-        this.$wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
+        this.wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
     }
     animate(cb) {
         if (this.fired) return;
 
-        this.$wrapper.classList.remove(this.controlTransitionClass);
+        this.wrapper.classList.remove(this.controlTransitionClass);
         cb();
         this.coordinateShift();
     }
@@ -104,7 +104,7 @@ class Slider {
     changeBackAndForth(cb) {
         cb();
         this.coordinateShift();
-        this.$wrapper.classList.add(this.controlTransitionClass);
+        this.wrapper.classList.add(this.controlTransitionClass);
     }
     setNavigationHTML() {
         const navigation = document.createElement('div');
@@ -118,11 +118,11 @@ class Slider {
         const prevBtn = document.querySelector(this.prevBtn);
         const nextBtn = document.querySelector(this.nextBtn);
 
-        this.$wrapper.addEventListener('transitionstart', () => {
+        this.wrapper.addEventListener('transitionstart', () => {
             this.fired = true;
         });
 
-        this.$wrapper.ontransitionend = () => {
+        this.wrapper.ontransitionend = () => {
             this.fired = false;
 
             if (this.activeIdx === this.realItems.length) {
@@ -223,17 +223,17 @@ class Slider {
     }
     setPlayerHTML() {
         this.makeControlContainer();
-        this.$playerBtn.type = 'button';
-        this.$playerBtn.innerText = this.controlPlayerStateArr[0];
-        this.$playerBtn.classList.add(this.controlPlayerBtn);
-        this.controllerContainer.append(this.$playerBtn);
+        this.playerBtn.type = 'button';
+        this.playerBtn.innerText = this.controlPlayerStateArr[0];
+        this.playerBtn.classList.add(this.controlPlayerBtn);
+        this.controllerContainer.append(this.playerBtn);
     }
     controlPlay() {
-        this.$playerBtn.addEventListener('click', () => {
-            this.$playerBtn.classList.toggle(this.controlPlayerClass);
-            this.$playerBtn.innerText = this.controlPlayerStateArr[Number(this.$playerBtn.classList.contains(this.controlPlayerClass))];
+        this.playerBtn.addEventListener('click', () => {
+            this.playerBtn.classList.toggle(this.controlPlayerClass);
+            this.playerBtn.innerText = this.controlPlayerStateArr[Number(this.playerBtn.classList.contains(this.controlPlayerClass))];
 
-            if (this.$playerBtn.classList.contains(this.controlPlayerClass)) {
+            if (this.playerBtn.classList.contains(this.controlPlayerClass)) {
                 this.clearTimer();
             } else {
                 this.autoPlayInit(this.timer);
@@ -246,7 +246,7 @@ class Slider {
     }
     setTransitionSpeed() {
         const speed = `${this.transitionSpeed/1000}s`;
-        this.$wrapper.style.transitionDuration = speed;
+        this.wrapper.style.transitionDuration = speed;
         for (var i = 0; i < this.paginationLi.length; i++) {
             this.paginationLi[i].children[0].style.transitionDuration = speed;
         }
@@ -256,7 +256,7 @@ class Slider {
         this.setWidthSTYLE();
         this.makeCloneHTML();
         this.coordinateShift();
-        this.$wrapper.classList.add(this.controlTransitionClass);
+        this.wrapper.classList.add(this.controlTransitionClass);
 
         if (this.navigation) this.navigationInit();
         if (this.pagination) this.paginationInit();
