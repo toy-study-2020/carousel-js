@@ -32,9 +32,9 @@ class Slider {
         if (option) {
             this.navigation = option.navigation;
             this.pagination = option.pagination;
-            this.autoPlay = option.autoPlay;
             this.controlPlayer = option.controlPlay;
             this.transitionSpeed = option.transitionSpeed;
+            if (option.autoPlay === false) this.autoPlay = false;
             if (option.timer) this.timer = option.timer;
         }
 
@@ -230,9 +230,15 @@ class Slider {
     setPlayerHTML() {
         this.makeControlContainer();
         this.playerBtn.type = 'button';
-        this.playerBtn.innerText = this.controlPlayerStateArr[0];
         this.playerBtn.classList.add(this.controlPlayerBtn);
         this.controllerContainer.append(this.playerBtn);
+
+        if (this.autoPlay) {
+            this.playerBtn.innerText = this.controlPlayerStateArr[0];
+        } else {
+            this.playerBtn.classList.add(this.controlPlayerClass);
+            this.playerBtn.innerText = this.controlPlayerStateArr[1];
+        }
     }
     controlPlay() {
         this.playerBtn.addEventListener('click', () => {

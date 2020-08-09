@@ -2,8 +2,8 @@ window.onload = function () {
     const option = {
         navigation: true,
         pagination: true,
-        autoPlay: true,
         controlPlay: true,
+        autoPlay: false,
         timer: 2000,
         transitionSpeed: 100
     }
