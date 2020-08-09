@@ -193,16 +193,16 @@ class Slider {
     }
     movePaging() {
         const _this = this;
+        const moveActiveSlide = function (index) {
+            _this.paginationLi[i].addEventListener('click', () => {
+                _this.animate(() => {
+                    _this.activeIdx = index + 1;
+                })
+            });
+        }
+
         for (var i = 0; i < this.paginationLi.length; i++) {
-            {
-                (function (index) {
-                    _this.paginationLi[i].addEventListener('click', () => {
-                        _this.animate(() => {
-                            _this.activeIdx = index + 1;
-                        })
-                    });
-                })(i);
-            }
+            moveActiveSlide(i);
         }
     }
     paginationInit() {
