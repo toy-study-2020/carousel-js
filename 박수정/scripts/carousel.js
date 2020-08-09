@@ -118,9 +118,9 @@ class Slider {
         const prevBtn = document.querySelector(this.prevBtn);
         const nextBtn = document.querySelector(this.nextBtn);
 
-        this.wrapper.addEventListener('transitionstart', () => {
+        this.wrapper.transitionstart = () => {
             this.fired = true;
-        });
+        };
 
         this.wrapper.ontransitionend = () => {
             this.fired = false;
