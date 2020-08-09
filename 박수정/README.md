@@ -1,7 +1,7 @@
 # Carousel Slider API
 
 ## - HTML Layout
-
+```html
 <div class="user-slider">
     <div class="slider__item">1</div>
     <div class="slider__item">2</div>
@@ -9,6 +9,7 @@
     <div class="slider__item">4</div>
     <div class="slider__item">5</div>
 </div>
+```
 
 ## - Initialize Slider
 
