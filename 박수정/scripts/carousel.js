@@ -166,18 +166,18 @@ class Slider {
     }
     setPaginationHTML() {
         this.makeControlContainer();
-        const PAGINATIONWRAPPER = document.createElement('ul');
-        this.controllerContainer.append(PAGINATIONWRAPPER);
+        const paginationwrapper = document.createElement('ul');
+        this.controllerContainer.append(paginationwrapper);
 
         for (let i = 0; i < this.realItems.length; i++) {
-            const PAGINATIONLI = document.createElement('li');
-            const PAGINATIONBTN = document.createElement('button');
+            const paginationli = document.createElement('li');
+            const paginationbtn = document.createElement('button');
 
-            PAGINATIONWRAPPER.append(PAGINATIONLI);
-            PAGINATIONBTN.type = 'button';
-            PAGINATIONLI.classList.add(this.paginationItem);
-            PAGINATIONLI.append(PAGINATIONBTN);
-            PAGINATIONBTN.append(i + 1);
+            paginationwrapper.append(paginationli);
+            paginationbtn.type = 'button';
+            paginationli.classList.add(this.paginationItem);
+            paginationli.append(paginationbtn);
+            paginationbtn.append(i + 1);
         }
     }
     changePaginationActive() {
