@@ -6,8 +6,8 @@ class Slider {
         this.wrapperName = `${this.slider}wrapper`;
         this.item = `.${this.slider}item`;
         this.navigationName = `${this.slider}navigation`;
-        this.prevBtn = `.${this.slider}navigation__btn--prev`;
-        this.nextBtn = `.${this.slider}navigation__btn--next`;
+        this.prevBtn = `.${this.navigationName}__btn--prev`;
+        this.nextBtn = `.${this.navigationName}__btn--next`;
         this.controlTransitionClass = 'transition--false';
         this.controlContainer = `${this.control}container`;
         this.controlPlayerBtn = `${this.control}player`;
