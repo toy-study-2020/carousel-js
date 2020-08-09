@@ -1,7 +1,6 @@
 class Slider {
     constructor(selector, option) {
         this.selector = document.querySelector(selector);
-        this.containernName = 'slider__container';
         this.wrapperName = 'slider__wrapper';
         this.item = '.slider__item';
         this.navigationName = 'slider__navigation';
@@ -45,7 +44,6 @@ class Slider {
         const wrapper = document.createElement('div');
         const slideItemHTML = this.selector.innerHTML;
 
-        this.selector.classList.add(this.containernName);
         this.selector.innerHTML = '';
         this.selector.appendChild(wrapper);
 
@@ -53,7 +51,11 @@ class Slider {
         wrapper.className = this.wrapperName;
         this.wrapper = document.querySelector(`.${this.wrapperName}`);
     }
-    setWidthSTYLE() {
+    setInitStyle() {
+        this.selector.style.position = 'relative';
+        this.selector.style.overflow = 'hidden';
+    }
+    setWidthStyle() {
         this.realItems = document.querySelectorAll(this.item);
         let getWidth = this.realItems[0].offsetWidth;
 
@@ -253,7 +255,8 @@ class Slider {
     }
     init() {
         this.setInitHTML();
-        this.setWidthSTYLE();
+        this.setInitStyle();
+        this.setWidthStyle();
         this.makeCloneHTML();
         this.coordinateShift();
         this.wrapper.classList.add(this.controlTransitionClass);
