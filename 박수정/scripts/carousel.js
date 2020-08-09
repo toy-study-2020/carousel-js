@@ -1,11 +1,12 @@
 class Slider {
     constructor(selector, option) {
         this.selector = document.querySelector(selector);
-        this.wrapperName = 'slider__wrapper';
-        this.item = '.slider__item';
-        this.navigationName = 'slider__navigation';
-        this.prevBtn = '.slider__navigation__btn--prev';
-        this.nextBtn = '.slider__navigation__btn--next';
+        this.slider = 'slider__'
+        this.wrapperName = `${this.slider}wrapper`;
+        this.item = `.${this.slider}item`;
+        this.navigationName = `${this.slider}navigation`;
+        this.prevBtn = `.${this.slider}navigation__btn--prev`;
+        this.nextBtn = `.${this.slider}navigation__btn--next`;
         this.controlTransitionClass = 'transition--false';
         this.controlContainer = 'control__container';
         this.controlPlayerBtn = 'control__player';
