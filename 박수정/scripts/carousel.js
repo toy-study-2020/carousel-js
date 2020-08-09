@@ -1,15 +1,16 @@
 class Slider {
     constructor(selector, option) {
         this.selector = document.querySelector(selector);
-        this.slider = 'slider__'
+        this.slider = 'slider__';
+        this.control = 'control__';
         this.wrapperName = `${this.slider}wrapper`;
         this.item = `.${this.slider}item`;
         this.navigationName = `${this.slider}navigation`;
         this.prevBtn = `.${this.slider}navigation__btn--prev`;
         this.nextBtn = `.${this.slider}navigation__btn--next`;
         this.controlTransitionClass = 'transition--false';
-        this.controlContainer = 'control__container';
-        this.controlPlayerBtn = 'control__player';
+        this.controlContainer = `${this.control}container`;
+        this.controlPlayerBtn = `${this.control}player`;
         this.paginationItem = 'pagination__item';
         this.controlPlayerClass = 'player--false';
         this.controlPlayerStateArr = ['정지', '재생'];
