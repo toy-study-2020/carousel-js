@@ -10,5 +10,5 @@ window.onload = function () {
 
     // const sliderTest = new Slider('.user-slider');
     const sliderTest = new Slider('.user-slider', option);
-    sliderTest.init();
+    sliderTest();
 }

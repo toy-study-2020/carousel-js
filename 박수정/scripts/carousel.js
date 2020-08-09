@@ -41,6 +41,8 @@ class Slider {
         if (this.controlPlayer) {
             this.playerBtn = document.createElement('button');
         }
+
+        this.init();
     }
     setInitHTML() {
         const wrapper = document.createElement('div');
