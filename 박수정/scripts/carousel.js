@@ -86,7 +86,7 @@ class Slider {
         this.wrapper.prepend(lastItem)
     }
     coordinateShift() {
-        this.wrapper.style.left = `-${this.activeIdx * this.containerWidth}px`;
+        this.wrapper.style.webkitTransform = `translate3d(-${this.activeIdx * this.containerWidth}px,0,0)`;
     }
     animate(cb) {
         if (this.fired) return;

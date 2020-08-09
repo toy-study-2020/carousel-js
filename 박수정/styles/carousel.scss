@@ -5,11 +5,10 @@ $timer: .3s;
 .slider {
     &__wrapper {
         position: relative;
-        left: 0;
         display: flex;
         justify-content: flex-start;
         align-content: center;
-        transition: left $timer ease;
+        transition: all $timer ease;
 
         &.transition--false {
             transition: none;
