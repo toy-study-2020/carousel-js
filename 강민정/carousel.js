@@ -190,8 +190,8 @@ const carouselPrototype = (function() {
   };
 
   Carousel.prototype.onAnimateClone = function(state) {
-    setTimeout(function () {
-        this.elWrapper.style.transition = 'all 0s';
+    this.elWrapper.addEventListener('transitionend', function() {
+      this.elWrapper.style.transition = 'all 0s';
       if (state === 'last') {
         this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * -1 + 'px)';
         this.index = 1;
@@ -199,7 +199,7 @@ const carouselPrototype = (function() {
         this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * this.lengthEl * -1 + 'px)';
         this.index = this.lengthEl;
       }
-    }.bind(this), 300);
+    }.bind(this));
   };
 
   Carousel.prototype.onIndicator = function(i) {
