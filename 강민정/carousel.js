@@ -76,8 +76,8 @@ const carouselPrototype = (function() {
     this.wrapperWidth = this.wrapper.offsetWidth;
 
     if (this.loop) {
-      this.clone(this.el[0], 'append');
-      this.clone(this.el[this.lengthEl - 1], 'prepend');
+      this.clone(this.el[this.cloneCounter], 'beforeend');
+      this.clone(this.el[this.lengthEl - 1], 'afterbegin');
     }
 
     this.setWidth();
@@ -103,11 +103,7 @@ const carouselPrototype = (function() {
   Carousel.prototype.clone = function(el, direction) {
     this.cloneEl = el.cloneNode(true);
     this.cloneEl.style.cssText = 'width: ' + this.wrapperWidth + 'px;';
-    if (direction === 'append') {
-      this.elWrapper.appendChild(this.cloneEl);
-    } else {
-      this.elWrapper.insertBefore(this.cloneEl, this.elWrapper.firstChild)
-    }
+    this.elWrapper.insertAdjacentElement(direction, this.cloneEl);
   };
 
   Carousel.prototype.createEl = function(el) {
