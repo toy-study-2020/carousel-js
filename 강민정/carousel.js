@@ -164,8 +164,8 @@ const carouselPrototype = (function() {
     this.onMove(this.targetData);
   };
 
-  Carousel.prototype.onMove = function(d) {
-    if (d === 'prev') {
+  Carousel.prototype.onMove = function(direction) {
+    if (direction === 'prev') {
       this.index = this.index === 0 ? this.lengthEl : this.index - 1;
     } else {
       this.index = this.index === this.lengthEl + 1 ? 0 : this.index + 1;
