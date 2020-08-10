@@ -1,6 +1,5 @@
-;(function() {
+const carouselPrototype = (function() {
   'use strict';
-
   const Carousel = function(args) {
     if (!args) {
       return;
@@ -220,20 +219,7 @@
     this.indicatorList.querySelector('li[data-index="' + this.indexIndicator  + '"]').classList.add('active');
   }
 
-  const domReady = () => {
-    const carousel = new Carousel({
-      wrapper: '.makeCarousel',
-      endEvent: () => {
-        console.log('end event');
-      }
-    });
-
-    const singleCarousel = new Carousel('.singleCarousel', 'a');
-  };
-
-  if (document.readyState === 'complete') {
-    domReady();
-  } else if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', domReady);
+  return {
+    Carousel
   }
 })();
