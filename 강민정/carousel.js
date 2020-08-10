@@ -39,6 +39,7 @@ const carouselPrototype = (function() {
     this.endEvent = args.endEvent ? args.endEvent : defaults.endEvent;
     this.lengthEl = this.el.length;
     this.moveTarget = null;
+    this.cloneCounter = this.slideView === 1 ? 0 : this.slideView;
     this.index = 1;
 
     this.init();
