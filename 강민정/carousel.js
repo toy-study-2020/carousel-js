@@ -41,6 +41,7 @@ const carouselPrototype = (function() {
     this.moveTarget = null;
     this.cloneCounter = this.slideView === 1 ? 0 : this.slideView;
     this.index = 1;
+    this.isMoveOn = false;
 
     this.init();
 
