@@ -1,205 +1,261 @@
-(function(doc, win) {
-  let defaults = {
-    // layout
-    frame: '.slide_frame',
-    list: '.slide_list',
-    slide: '.slide_bx',
-    // paging
-    paging: true,
-    pagingEl: '.slide_paging',
-    pagingActive: 'on',
-    //prev, next button
-    control: true,
-    controlEl: '.slide_control',
-    prevBtn: '.btn_preview',
-    nextBtn: '.btn_next',
+let defaults = {
+  frame: '.slide_frame',
+  list: '.slide_list',
+  slide: '.slide_bx',
+  paging: false,
+  pagingEl: '.slide_paging',
+  pagingActive: 'on',
+  control: true,
+  controlEl: '.slide_control',
+  prevBtn: '.btn_preview',
+  nextBtn: '.btn_next',
+  speed: 2000,
+  autoplay: false,
+  playdirection: true,
+  autospeed: 2000,
+  playControl: false,
+  playControlEl: '.play_control',
+  btnStop: '.btn_stop',
+  btnPlay: '.btn_play',
+  playActive: 'on'
+};
+
+function Slider(el, opt) {
+  this.el = document.querySelector(el);
+  this.setOpt = Object.assign(defaults, opt);
+
+  this.init();
+};
+
+Slider.prototype = {
+  init: function () {
+    this.setElement();
+    this.setSlideSize();
+    this.cloneSlide();
+    this.eventBind();
+  },
+
+  setElement: function () {
+    this.frame = this.el.querySelector(this.setOpt.frame);
+    this.list = this.el.querySelector(this.setOpt.list);
+    this.slide = this.el.querySelectorAll(this.setOpt.slide);
+    this.pagingEl = "";
+    this.controlEl = "";
+    this.playControlEl = "";
+    this.prevBtn = "";
+    this.nextBtn = "";
+    this.pagingBtn = "";
+    this.btnStop = "";
+    this.btnPlay = "";
+    this.timer = "";
+
+    this.cloneNum = 2;
+    this.frameWidth = this.frame.clientWidth;
+    this.slideLength = this.slide.length;
+    this.listWidth = this.frameWidth * (this.slideLength + this.cloneNum);
+    this.currentPosi = -this.frame.clientWidth * (this.cloneNum / 2);
+    this.currentCount = 0;
+    this.isEvent = false;
+
+    if (this.setOpt.paging) this.setPaging();
+    if (this.setOpt.control) this.setControl();
+    if (this.setOpt.autoplay) this.setAutoplay();
+    if (this.setOpt.playControl) this.setControlPlay();
+  },
+
+  setSlideSize: function () {
+    this.list.setAttribute('style',
+      `width: ${this.listWidth}px;
+      transform: translate3d(${this.currentPosi}px, 0, 0);`
+    );
+
+    this.slide.forEach((slide, idx) => {
+      slide.setAttribute('style', `width: ${this.frameWidth}px;`);
+    });
+  },
+
+  replaceClass: function(className) {
+    return className.replace('.', '');
+  },
+
+  setPaging: function() {
+    let pagingDom = '',
+        initClass = '';
+
+    this.el.insertAdjacentHTML('beforeend', 
+      `<div class="${this.replaceClass(this.setOpt.pagingEl)}"></div>`);
+    this.pagingEl = this.el.querySelector(this.setOpt.pagingEl);
     
-    speed: .2,
-    autoplay: true,
-    direction: true,
-    playControl: true,
-    playControlEl: '.play_control'
-  };
+    this.slide.forEach((slide, idx) => {
+      initClass = (idx === this.currentCount) ? this.setOpt.pagingActive : '';
+      pagingDom += `<a href="#" class="page ${initClass}">${idx + 1}</a>`;
+    });
+    
+    this.pagingEl.innerHTML = pagingDom;
+    this.pagingBtn = this.pagingEl.querySelectorAll('.page');
+  },
 
-  function Slider(el, opt) {
-    this.el = doc.querySelector(el);
-    this.setObj = Object.assign(defaults, opt);
+  setControl: function() {
+    this.el.insertAdjacentHTML('beforeend', 
+      `<div class="${this.replaceClass(this.setOpt.controlEl)}"></div>`);
+    this.controlEl = this.el.querySelector(this.setOpt.controlEl);
 
-    this.init();
-  };
+    this.controlEl.innerHTML = 
+    `<button type="button" class="${this.replaceClass(this.setOpt.prevBtn)}">이전</button>
+      <button type="button" class="${this.replaceClass(this.setOpt.nextBtn)}">다음</button>`;
+    
+    this.prevBtn = this.controlEl.querySelector(this.setOpt.prevBtn);
+    this.nextBtn = this.controlEl.querySelector(this.setOpt.nextBtn);
+  },
 
-  Slider.prototype = {
-    init: function () {
-      this.setElement();
-      this.setSlideSize();
-      this.cloneSlide();
-      this.eventBind();
-    },
+  setAutoplay: function() {
+    this.timer = setInterval(() => {
+      this.setOpt.playdirection ? this.clickNext() : this.clickPrev();
+    }, this.setOpt.autospeed);
+  },
 
-    setElement: function () {
-      this.frame = this.el.querySelector(this.setObj.frame);
-      this.list = this.el.querySelector(this.setObj.list);
-      this.slide = this.el.querySelectorAll(this.setObj.slide);
-      this.pagingEl = this.el.querySelector(this.setObj.pagingEl);
-      this.controlEl = this.el.querySelector(this.setObj.controlEl);
-      this.playControlEl = this.el.querySelector(this.setObj.playControlEl);
-      this.prevBtn = "";
-      this.nextBtn = "";
-      this.pagingBtn = "";
-      this.playControlBtn = "";
-      this.playSlide = "";
-      this.cloneNum = 2;
-      this.frameWidth = this.frame.clientWidth;
-      this.slideLength = this.slide.length;
-      this.listWidth = this.frameWidth * (this.slideLength + this.cloneNum);
-      this.currentPosi = -this.frame.clientWidth * (this.cloneNum / 2);
-      this.currentCount = 0;
-      this.eventFlag = false;
+  setControlPlay: function() {
+    this.el.insertAdjacentHTML('beforeend', 
+      `<div class="${this.replaceClass(this.setOpt.playControlEl)}"></div>`);
 
-      if (this.setObj.paging) this.setPaging();
-      if (this.setObj.control) this.setControl();
-      if (this.setObj.autoplay) this.setAutoplay();
-      if (this.setObj.playControl) this.setControlPlay();
-    },
+    this.playControlEl = this.el.querySelector(this.setOpt.playControlEl)
 
-    setSlideSize: function () {
-      this.list.setAttribute('style',
-       `width: ${this.listWidth}px;
-        transform: translate3d(${this.currentPosi}px, 0, 0);`
-      );
+    this.playControlEl.innerHTML = 
+      `<button type="button" class="${this.replaceClass(this.setOpt.btnStop)}">정지</button>
+        <button type="button" class="${this.replaceClass(this.setOpt.btnPlay)}">재생</button>`;
 
-      this.slide.forEach((slide, idx) => {
-        slide.setAttribute('style', `width: ${this.frameWidth}px;`);
-      });
-    },
+    this.btnStop = this.playControlEl.querySelector(this.setOpt.btnStop);
+    this.btnPlay = this.playControlEl.querySelector(this.setOpt.btnPlay);
+  },
 
-    setPaging: function() {
-      let pagingDom = '',
-          initClass = '';
-      
-      this.slide.forEach((slide, idx) => {
-        initClass = (idx === this.currentCount) ? this.setObj.pagingActive : '';
-        pagingDom += `<a href="#" class="page ${initClass}">${idx + 1}</a>`;
-      });
-      
-      this.pagingEl.innerHTML = pagingDom;
-      this.pagingBtn = this.pagingEl.querySelectorAll('.page');
-    },
+  setSpeed: function(speed) {
+    return speed / 10000;
+  },
+  
+  cloneSlide: function () {
+    let firstSlide = this.slide[0].cloneNode(true),
+    lastSlide = this.slide[this.slideLength - (this.cloneNum / 2)].cloneNode(true);
+    firstSlide.classList.add('clone_slide');
+    lastSlide.classList.add('clone_slide');
 
-    setControl: function() {
-      this.controlEl.innerHTML = 
-      `<button type="button" class="btn_preview">이전</button>
-       <button type="button" class="btn_next">다음</button>`;
-      
-      this.prevBtn = this.controlEl.querySelector(this.setObj.prevBtn);
-      this.nextBtn = this.controlEl.querySelector(this.setObj.nextBtn);
-    },
+    this.list.prepend(lastSlide);
+    this.list.append(firstSlide);
+  },
 
-    setAutoplay: function() {
-      this.playSlide = setInterval(() => {
-        this.setObj.direction ? this.clickNext() : this.clickPrev();
-      }, 2000)
-    },
-
-    setControlPlay: function() {
-      this.playControlEl.innerHtml = `<button type="button" class="btn_play_control">정지</button>`;
-
-      this.playControlBtn = this.playControlEl.querySelector('.btn_play_control');
-    },
-
-    cloneSlide: function () {
-      let firstSlide = this.slide[0].cloneNode(true),
-      lastSlide = this.slide[this.slideLength - 1].cloneNode(true);
-      firstSlide.classList.add('clone_slide');
-      lastSlide.classList.add('clone_slide');
-
-      this.list.prepend(lastSlide);
-      this.list.append(firstSlide);
-    },
-
-    eventBind: function() {
-      if (this.setObj.control) {
-        this.prevBtn.addEventListener('click', this.clickPrev.bind(this));
-        this.nextBtn.addEventListener('click', this.clickNext.bind(this));
-      }
-        
-      if (this.setObj.paging) {
-        this.pagingBtn.forEach((pagingBtn, idx) => {
-          pagingBtn.addEventListener('click', this.clickPaging.bind(this, idx));
-        });
-      }
-
-      if (this.setObj.playControl) {
-        this.playControlBtn.addEventListener('click', this.playControlEvt.bind(this));
-      }
-    },
-
-    moveSlide: function (position, duration = this.setObj.speed) {
-      this.list.style.transform = `translate3d(${position}px, 0, 0)`;
-      this.list.style.transitionDuration = `${duration}s`;
-
-      if (this.setObj.paging) this.togglePaging();
-    },
-
-    clickPaging: function (idx) {
-      this.currentPosi = -this.frameWidth * (idx + 1);
-      this.currentCount = idx;
-
-      this.moveSlide(this.currentPosi);
-    },
-
-    togglePaging: function() {
-      this.pagingBtn.forEach((item, idx) => {
-        idx === this.currentCount ? 
-          this.pagingBtn[idx].classList.add(this.setObj.pagingActive) : 
-          this.pagingBtn[idx].classList.remove(this.setObj.pagingActive);
-      });
-    },
-
-    clickPrev: function(){
-      if (this.eventFlag) return;
-
-      this.currentPosi += this.frameWidth;
-      this.currentCount--;
-      this.moveSlide(this.currentPosi);
-      this.clickBtnEvt();
-    },
-
-    clickNext: function(){
-      if (this.eventFlag) return;
-
-      this.currentPosi -= this.frameWidth;
-      this.currentCount++;
-      this.moveSlide(this.currentPosi);
-      this.clickBtnEvt();
-    },
-
-    clickBtnEvt: function(e) {
-      this.eventFlag = true;
-
-      if (this.currentCount < 0) {
-        this.currentCount = this.slideLength - 1;
-        this.currentPosi = -this.frameWidth * this.slideLength;
-      };
-
-      if (this.currentCount >= this.slideLength) {
-        this.currentCount = 0;
-        this.currentPosi = -this.frameWidth;
-      };
-
-      setTimeout(() => {
-        this.moveSlide(this.currentPosi, 0);
-      }, 200);
-      if (this.setObj.paging) this.togglePaging();
-
-      setTimeout(() => { this.eventFlag = false; }, 200);
-    },
-
-    playControlEvt: function() {
-      clearInterval(this.playSlide);
+  eventBind: function() {
+    if (this.setOpt.control) {
+      this.prevBtn.addEventListener('click', this.clickPrev.bind(this));
+      this.nextBtn.addEventListener('click', this.clickNext.bind(this));
     }
-  };
+      
+    if (this.setOpt.paging) {
+      this.pagingBtn.forEach((pagingBtn, idx) => {
+        pagingBtn.addEventListener('click', this.clickPaging.bind(this, idx));
+      });
+    }
 
-  let slide = new Slider('.slider_wrap');
+    // if (this.setOpt.autoplay) {
+    //   this.frame.addEventListener('mouseenter', () => {
+    //     this.slideStop();
+    //   });
+      
+    //   this.frame.addEventListener('mouseleave', () => {
+    //     this.slidePlay();
+    //   });
+    // }
 
-})(document, window)
+    if (this.setOpt.playControl) {
+      this.btnStop.addEventListener('click', this.slideStop.bind(this));
+      this.btnPlay.addEventListener('click', this.slidePlay.bind(this));
+    }
+
+    this.list.addEventListener('transitionstart', () => this.isEvent = true);
+    this.list.addEventListener('transitionend', this.checkCondition.bind(this));
+  },
+
+  moveSlide: function (position, duration = this.setSpeed(this.setOpt.speed)) {
+    this.list.style.transform = `translate3d(${position}px, 0, 0)`;
+    this.list.style.transitionDuration = `${duration}s`;
+
+    if (this.setOpt.paging) this.togglePaging();
+  },
+
+  clickPrev: function() {
+    this.clickBtnEvt('prev');
+  },
+
+  clickNext: function() {
+    this.clickBtnEvt('next');
+  },
+
+  clickBtnEvt: function(direction) {
+    if (this.isEvent) return;
+
+    switch(direction) {
+      case 'prev': 
+        this.currentPosi += this.frameWidth;
+        this.currentCount--;
+        break;
+      case 'next': 
+        this.currentPosi -= this.frameWidth;
+        this.currentCount++;
+        break;
+    }
+    
+    this.moveSlide(this.currentPosi);
+    return this.currentCount;
+  },
+
+  checkCondition: function() {
+    if (this.currentCount < 0) {
+      this.currentCount = this.slideLength - 1;
+      this.currentPosi = -this.frameWidth * this.slideLength;
+  
+      this.moveSlide(this.currentPosi, 0);
+    };
+
+    if (this.currentCount >= this.slideLength) {
+      this.currentCount = 0;
+      this.currentPosi = -this.frameWidth;
+      
+      this.moveSlide(this.currentPosi, 0);
+    };
+
+    this.isEvent = false;
+  },
+
+  clickPaging: function (idx) {
+    this.currentPosi = -this.frameWidth * (idx + 1);
+    this.currentCount = idx;
+
+    this.moveSlide(this.currentPosi);
+  },
+
+  togglePaging: function() {
+    this.pagingBtn.forEach((item, idx) => {
+      idx === this.currentCount ? 
+        this.pagingBtn[idx].classList.add(this.setOpt.pagingActive) : 
+        this.pagingBtn[idx].classList.remove(this.setOpt.pagingActive);
+    });
+  },
+
+  slideStop: function() {
+    this.btnPlay.classList.remove(this.setOpt.playActive);
+    this.btnStop.classList.add(this.setOpt.playActive);
+    clearInterval(this.timer);
+  },
+
+  slidePlay: function() {
+    this.btnPlay.classList.add(this.setOpt.playActive);
+    this.btnStop.classList.remove(this.setOpt.playActive);
+    this.setAutoplay();
+  }
+};
+
+let slide = new Slider('.slider_wrap',
+  {
+    paging: true,
+    autoplay: true,
+    playControl: true
+  }
+);
