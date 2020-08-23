@@ -1,6 +1,5 @@
-;(function() {
+const carouselPrototype = (function() {
   'use strict';
-
   const Carousel = function(args) {
     if (!args) {
       return;
@@ -40,7 +39,12 @@
     this.endEvent = args.endEvent ? args.endEvent : defaults.endEvent;
     this.lengthEl = this.el.length;
     this.moveTarget = null;
+    this.indexFirst = 0;
+    this.indexLast = this.lengthEl - 1;
+    this.cloneCount = 2;
+    this.translateXLeft = -1;
     this.index = 1;
+    this.isMove = true;
 
     this.init();
 
@@ -53,15 +57,17 @@
     }
 
     this.timer = function() {
-      this.autoPlayer = setInterval(function() {
+      this.auto = setInterval(function() {
         this.onMove('next');
       }.bind(this), 3000);
     }
 
-    this.timer();
+    if (this.autoplay) {
+      this.timer();
+    }
 
     this.wrapper.addEventListener('mouseenter', function() {
-      clearInterval(this.autoPlayer);
+      clearInterval(this.auto);
     }.bind(this));
 
     this.wrapper.addEventListener('mouseleave', function() {
@@ -77,8 +83,8 @@
     this.wrapperWidth = this.wrapper.offsetWidth;
 
     if (this.loop) {
-      this.clone(this.el[0], 'append');
-      this.clone(this.el[this.lengthEl - 1], 'prepend');
+      this.clone(this.el[this.indexFirst], 'beforeend');
+      this.clone(this.el[this.indexLast], 'afterbegin');
     }
 
     this.setWidth();
@@ -90,25 +96,24 @@
         return;
       }
       this.el[i].style.cssText = 'width: ' + this.wrapperWidth + 'px;';
+      this.el[i].classList.add('slide');
+      this.el[this.indexFirst].classList.add('active');
     }
 
     this.setWrapperWidth();
   };
 
   Carousel.prototype.setWrapperWidth = function() {
-    this.updateLengthEl = this.loop ? this.lengthEl + 2 : this.lengthEl;
-    this.transformX = this.loop ? -1 * this.wrapperWidth : 0;
+    this.updateLengthEl = this.loop ? this.lengthEl + this.cloneCount : this.lengthEl;
+    this.transformX = this.loop ? this.translateXLeft * this.wrapperWidth : 0;
     this.elWrapper.style.cssText = 'width: '+ this.wrapperWidth * this.updateLengthEl + 'px; transform: translateX(' + this.transformX + 'px);';
   };
 
   Carousel.prototype.clone = function(el, direction) {
     this.cloneEl = el.cloneNode(true);
+    this.cloneEl.classList.add('clone');
     this.cloneEl.style.cssText = 'width: ' + this.wrapperWidth + 'px;';
-    if (direction === 'append') {
-      this.elWrapper.appendChild(this.cloneEl);
-    } else {
-      this.elWrapper.insertBefore(this.cloneEl, this.elWrapper.firstChild)
-    }
+    this.elWrapper.insertAdjacentElement(direction, this.cloneEl);
   };
 
   Carousel.prototype.createEl = function(el) {
@@ -151,29 +156,47 @@
   Carousel.prototype.setIndicator = function() {
     this.indicatorEl = this.indicatorList.getElementsByTagName('li');
     for (let i = 0; i < this.lengthEl; i++) {
-      this.indicatorEl[i].innerHTML = i + 1;
+      this.indicatorEl[i].innerHTML = i;
       this.indicatorEl[i].setAttribute('data-index', i);
-      this.indicatorEl[0].classList.add('active');
+      this.indicatorIndex = this.indicatorEl[i].getAttribute('data-index');
+      this.indicatorEl[i].addEventListener('click', this.onMove.bind(this, this.indicatorIndex));
     }
 
+    this.indicatorInit();
     this.appendCarousel(this.indicatorList);
-  }
+  };
 
-  Carousel.prototype.appendCarousel = function(el) {
+  Carousel.prototype.indicatorInit = function() {
+    this.indicatorEl[this.indexFirst].classList.add('active');
+  };
+
+    Carousel.prototype.appendCarousel = function(el) {
     this.wrapper.appendChild(el);
   };
 
   Carousel.prototype.handlerControl = function() {
+    this.elWrapper.addEventListener('transitionrun', function() {
+      this.isMove = false;
+    }.bind(this));
+
+    this.elWrapper.addEventListener('transitionend', function() {
+      this.isMove = true;
+    }.bind(this));
+
     this.moveTarget = event.target;
     this.targetData = this.moveTarget.dataset.direction;
-    this.onMove(this.targetData);
+
+    if (this.isMove) this.onMove(this.targetData);
+
   };
 
-  Carousel.prototype.onMove = function(d) {
-    if (d === 'prev') {
-      this.index = this.index === 0 ? this.lengthEl : this.index - 1;
+  Carousel.prototype.onMove = function(direction) {
+    if (direction === 'prev') {
+      this.index = this.index === 0 ? this.lengthEl : --this.index;
+    } else if (direction === 'next') {
+      this.index = this.index > this.lengthEl ? 0 : ++this.index;
     } else {
-      this.index = this.index === this.lengthEl + 1 ? 0 : this.index + 1;
+      this.index = Number(direction) + 1;
     }
 
     this.onAnimate();
@@ -181,59 +204,48 @@
   };
 
   Carousel.prototype.onAnimate = function() {
-    this.moveTransform = this.wrapperWidth * this.index * -1;
+    this.moveTransform = this.wrapperWidth * this.index * this.translateXLeft;
     this.elWrapper.style.transition = 'all .3s';
     this.elWrapper.style.transform = 'translateX(' + this.moveTransform + 'px)';
 
-    if (this.index === this.lengthEl + 1) {
-      this.onAnimateClone('last');
-    }
-
-    if (this.index === 0) {
-      this.onAnimateClone('first');
-    }
+    this.elWrapper.addEventListener('transitionend', function() {
+      if (this.index > this.lengthEl) {
+        this.onAnimateClone('last');
+      }
+      if (this.index === this.indexFirst) {
+        this.onAnimateClone('first');
+      }
+    }.bind(this));
   };
 
   Carousel.prototype.onAnimateClone = function(state) {
-    setTimeout(function () {
-        this.elWrapper.style.transition = 'all 0s';
-      if (state === 'last') {
-        this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * -1 + 'px)';
-        this.index = 1;
-      } else {
-        this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * this.lengthEl * -1 + 'px)';
-        this.index = this.lengthEl;
-      }
-    }.bind(this), 300);
+    this.elWrapper.style.transition = 'all 0s';
+    if (state === 'last') {
+      this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * this.translateXLeft + 'px)';
+      this.index = this.indexFirst + this.cloneCount / 2;
+    } else {
+      this.elWrapper.style.transform = 'translateX(' + this.wrapperWidth * this.lengthEl * this.translateXLeft + 'px)';
+      this.index = this.lengthEl;
+    }
   };
 
   Carousel.prototype.onIndicator = function(i) {
     for (let i = 0; i < this.lengthEl; i++) {
       this.indicatorList.querySelectorAll('li')[i].classList.remove('active');
+      this.el[i].classList.remove('active');
     }
+
     this.indexIndicator =
-      i === this.lengthEl + 1
-        ? 0
-        : i === 0
-        ? this.lengthEl - 1
-        : i - 1;
+      i > this.lengthEl
+        ? this.indexFirst
+        : i === this.indexFirst
+        ? this.indexLast
+        : --i;
     this.indicatorList.querySelector('li[data-index="' + this.indexIndicator  + '"]').classList.add('active');
+    this.el[this.indexIndicator].classList.add('active');
   }
 
-  const domReady = () => {
-    const carousel = new Carousel({
-      wrapper: '.makeCarousel',
-      endEvent: () => {
-        console.log('end event');
-      }
-    });
-
-    const singleCarousel = new Carousel('.singleCarousel', 'a');
-  };
-
-  if (document.readyState === 'complete') {
-    domReady();
-  } else if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', domReady);
+  return {
+    Carousel
   }
 })();

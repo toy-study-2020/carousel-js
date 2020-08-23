@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>carousel script</title>
+  <link rel="stylesheet" href="./carousel.css">
   <link rel="stylesheet" href="./style.css">
   <script src="./carousel.js"></script>
 </head>
@@ -30,5 +31,27 @@
     <li>eighth</li>
   </ul>
 </div>
+<script>
+;(function() {
+  'use strict';
+
+  const domReady = () => {
+    const carousel = new carouselPrototype.Carousel({
+      wrapper: '.makeCarousel',
+      endEvent: () => {
+        console.log('end event');
+      }
+    });
+
+    const singleCarousel = new carouselPrototype.Carousel('.singleCarousel', 'a');
+  };
+
+  if (document.readyState === 'complete') {
+    domReady();
+  } else if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', domReady);
+  }
+})();
+</script>
 </body>
 </html>
